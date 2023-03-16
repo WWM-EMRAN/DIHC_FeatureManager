@@ -6,7 +6,9 @@ Contributor: Emran Ali
 
 Involvement: Deakin- Innovation in Healthcare (DIHC)
 
-Email: wwm.emran@gmail.com, emran.ali@research.deakin.edu.au
+Email: emran.ali@research.deakin.edu.au
+
+Thanks to: DIHC Team
 
 
 ## What does it do?
