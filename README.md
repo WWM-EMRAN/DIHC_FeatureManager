@@ -93,7 +93,6 @@ The functions are parametric so that the users can have the flexibility of using
     
     """ Load data to an 1D np.array
     """
-    sig_freq = 256
     samp_data = np.array(...)
     
     """ Set sampling frequency
