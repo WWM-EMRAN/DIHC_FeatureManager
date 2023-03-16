@@ -7,7 +7,7 @@
 import pandas as pd
 
 # from DIHC_FeatureManager import DIHC_FeatureManager
-from DIHC_FeatureManager import *
+# from DIHC_FeatureManager import *
 # import DIHC_FeatureManager
 from DIHC_FeatureManager.DIHC_FeatureManager import *
 
