@@ -17,7 +17,10 @@ feature selection and other feature management and engineering related tasks.
 This Feature Manager project has been developed as part of feature engineering for 
 Machine Learning models. 
 <br>
-[NB: This is not a complete library and we are continuously adding contents in it.] 
+[NB: 
+1. This is not a complete library and we are continuously adding contents in it.
+2. For Fuzzy entropy, Distribution entropy and Sample entropy profile features Matlab engine is needed to be installed. For more instruction, please see "Integrate_Matlab_in_Python.txt".
+] 
 
 ## Feature Extraction
 
