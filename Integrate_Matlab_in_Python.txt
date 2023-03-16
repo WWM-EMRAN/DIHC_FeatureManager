@@ -1,0 +1,33 @@
+
+
+Generalized (Install:
+1) Go to: <matlab_directory>/RXXXX/extern/eninges/python
+2) Check if setup.py exits
+3) Install using "python setup.py install"
+4) import and work:
+	import matlab
+	import matlab.engine
+
+
+Code basis (Build): 
+1) Go to: <matlab_directory>/RXXXX/extern/eninges/python
+2) Check if setup.py exits
+3) Build using "python setup.py build --build-base "<an_accessible_user_directory_for_matlab_build>" install"
+4) To import and work you need to add the build path to the python code as:
+	import sys
+	sys.path.append("an_accessible_user_directory_for_matlab_build/lib/")
+5) import and work:
+	import matlab
+	import matlab.engine
+
+
+
+================================================
+RXXXX = XXXX is the year of release of matlab
+<an_accessible_user_directory_for_matlab_build> = usually "~/matlab_build/" then it will have "/lib/" and all in it
+
+
+
+
+
+

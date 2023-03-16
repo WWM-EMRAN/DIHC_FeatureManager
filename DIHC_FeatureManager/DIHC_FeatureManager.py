@@ -15,6 +15,8 @@ from DIHC_FeatureManager.DIHC_FeatureExtractor import *
 
 class DIHC_FeatureManager:
 
+    enumerate
+
     # ## Initialization
     def __init__(self):
         self.feat_extractor = None
@@ -22,7 +24,7 @@ class DIHC_FeatureManager:
         return
 
     # ## Feature extractor
-    def get_features_from_data(self, data, feature_type=[], segment_length=None, segment_overlap=0, signal_frequency=256,
+    def get_features_from_data(self, data, feature_names=[], segment_length=None, segment_overlap=0, signal_frequency=256,
                                filtering_enabled=False, lowcut=1, highcut=48, manage_exceptional_data=0):
         if len(data)==0:
             print(f'Data is empty...')
@@ -35,19 +37,20 @@ class DIHC_FeatureManager:
         all_feat_df = pd.DataFrame()
 
         if segment_length is None:
-            all_feat_df = self.feat_extractor.get_all_features(data, feature_type)
+            all_feat_df = self.feat_extractor.get_all_features(data, feature_names)
         else:
             if (segment_length*signal_frequency) > len(data):
                 print(f'Data can\'t be segmented...')
-                all_feat_df = self.feat_extractor.get_all_features(data, feature_type)
+                all_feat_df = self.feat_extractor.get_all_features(data, feature_names)
             else:
                 seg_st = 0
                 seg_len = segment_length*signal_frequency
                 seg_mov = seg_len-(segment_overlap*signal_frequency)
                 while (seg_st<len(data)):
+                    # print('Feature list...', feature_names)
                     seg_end = seg_st+seg_len
                     seg_data = data[seg_st:seg_end]
-                    feat_df = self.feat_extractor.get_all_features(seg_data, feature_type)
+                    feat_df = self.feat_extractor.get_all_features(seg_data, feature_names)
                     all_feat_df = pd.concat([all_feat_df, feat_df])
                     all_feat_df = all_feat_df.reset_index(drop=True)
                     seg_st += seg_mov

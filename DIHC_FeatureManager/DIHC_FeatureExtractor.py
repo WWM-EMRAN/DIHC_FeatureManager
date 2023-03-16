@@ -138,10 +138,9 @@ class DIHC_FeatureExtractor:
 
     ### Getting all the features
     #############################################################
-    def get_all_features(self, seg_data, feature_type):
+    def get_all_features(self, seg_data, feature_names):
         if self.matlab_engine is None:
             self.matlab_engine = self.manage_matlab_python_engine()
-        feature_names = self.get_new_features_to_calculate(feature_type)
         feature_values = []
 
         seg_values = seg_data.copy()
