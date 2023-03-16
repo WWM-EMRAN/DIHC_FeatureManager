@@ -1,8 +1,8 @@
-# DIHC_Downloader
+# DIHC_FeatureManager
 
 
-## Project Name: DIHC_Downloader 
-Author: Emran Ali
+## Project Name: DIHC_FeatureManager 
+Contributor: Emran Ali
 
 Involvement: Deakin- Innovation in Healthcare (DIHC)
 
