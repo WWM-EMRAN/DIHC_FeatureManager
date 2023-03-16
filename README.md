@@ -4,134 +4,19 @@
 ## Project Name: DIHC_Downloader 
 Author: Emran Ali
 
-Involvement: HumachLab (HML) & Deakin- Innovation in Healthcare (DIHC)
+Involvement: Deakin- Innovation in Healthcare (DIHC)
 
 Email: wwm.emran@gmail.com, emran.ali@research.deakin.edu.au
 
 
 ## What does it do?
-Nested file downloader from nested directories of a web directory
+Feature engineering and other feature management related tasks. 
 
-This script contains a class that allows some functions to download files from the web directory when a specific name 
-of the web directory is provided. It automatically finds the links to the multilevel nested directories, sorts them 
-accordingly and saves them in the corresponding nested directories.
-
-If the download is interrupted then next time with the same parameters it will start downloading from the file it was 
-been interrupted, if the download directory contains the already downloaded files and folder structure. 
-
-
-## Description 
-#### Key Task:
-Downloader class that manages all the functionalities for downloading files <br> 
-
-#### Insight: <br> 
-This class contains all the properties requires to customize the properties of download processes. 
-It also contains the functions used for directory traversal and byte movement (downloading). 
-
-###### Properties
------------
-- url_to_download : str
-
-    Base URL of the web directory to download files from
-    
-- download_directory : str
-
-    Download directory where the files will be stored
-###### Optional
----------
-- username: str
-
-    If the web directory needs authentication to access the contents
-    
-- password: str
-
-    If the web directory needs authentication to access the contents
-    
-- file_types_to_download: list(str)
-
-    List of the specific types of files to download
-    
-- file_types_not_to_download: list(str)
-
-    List of the specific types of files to to be excluded to download
-    
-- folder_indicator: list(str)
-
-    Special folder names containing special characters that are usually excluded but expected to be downloaded
-    
-- url_not_to_consider: list(str)
-
-    Web directory may contain unnecessary links that can be considered as folders but are not and meant to be
-    excluded during downloading
-    
-- is_need_html: bool
-
-    If the web directory contains html file and instead of traversing thru the link to find folders, that html files
-    are needed to be downloaded
-    
-###### Methods
---------
-
-- __ init() __
-
-    Takes- Minimum two of the parameter values from above parameter list | Returns- Object of this class | Func-
-    Creates an object with the corresponding parameter values assigned to it
-    
-- download()
-
-    Takes- none | Returns- none | Func- Traverse thru the web directory to find the nested directories and their
-    contents. Downloads them and sort accordingly in the local download directory.
-
-
-## Application (Code Examples) 
-    """ Importing necessary modules
-    """
-    from DIHC_Downloader import DIHC_Downloader
-
-
-    """ Test parameter setup for normal web directory
-    """
-    ### Example-1
-    url = 'https://www.physionet.org/files/chbmit/1.0.0/'
-    directory = './'
-    unusual_folders = ['1.0.0']
-    downloader = DIHC_Downloader(url, download_directory=directory, folder_indicator=unusual_folders)
-
-
-    """ Test parameter setup with web directory that requires authentication credentials
-    """
-    ### Example-2
-    url = 'https://www.isip.piconepress.com/projects/tuh_eeg/downloads/tuh_eeg_seizure/v1.5.1/'
-    directory = './'
-    unusual_folders = ['1.5.1', '../']
-    unusual_url = ['/?']
-    username = 'nedc_tuh_eeg'
-    password = 'nedc_tuh_eeg'
-    downloader = DIHC_Downloader(url, download_directory=directory, username=username, password=password, folder_indicator=unusual_folders, url_not_to_consider=unusual_url)
-
-    """ Strat downloading process
-    """
-    # #%%
-    downloader.download()
-
-
-## About
-Version: 0.9.0
-
-Stage: Initial beta
-
-
-
-
-
-
-
-
-
-
-# DIHC_FeatureManager
-This Feature Manager project has been developed as part of feature engineering for Machine Learning models. 
-It includes the Feature extraction, Feature selection and other feature engineering related functionalities.
+This library provides a variety of functionalities starting from feature extraction, 
+feature selection and other feature management and engineering related tasks.
+This Feature Manager project has been developed as part of feature engineering for 
+Machine Learning models. 
+<br>
 [NB: This is not a complete library and we are continuously adding contents in it.] 
 
 ## Feature Extraction
@@ -140,14 +25,99 @@ It includes the Feature extraction, Feature selection and other feature engineer
 It contains the following features:
 ![Problem finding the image...](feature_list.png "List of features.")
 
-### Example Code:
-`from DIHC_FeatureManager.DIHC_FeatureManager import *`
-`feat_df = feat_manager.get_features_from_data(samp_data, feature_names=DIHC_FeatureGroup.tdNlEn.value, segment_length=5, signal_frequency=sig_freq)`
+### Description 
+#### Key Task:
+The classes in this library all the functions for feature extraction and feature selection <br> 
+
+#### Insight: <br> 
+The functions are parametric so that the users can have the flexibility of using as they want.
+    
+###### Useful Methods
+--------
+    
+- get_features_from_data()
+
+    Takes- data, feature_names, segment_length, segment_overlap, signal_frequency, filtering_enabled, lowcut, highcut, manage_exceptional_data | Returns- <Pandas.DatFrame> | Func- Generates features based on the data provided and other criteria of the names of the features, window length, sampling frequency etc.
+    It returns a pandas dataframe containing the feature names (column-wise) and the features for the data points (row-wise).
+  
+
+###### Properties
+-----------
+- data : np.array <list like 1D array>
+
+    The data for which the features will be extracted
+
+###### Optional
+---------
+- feature_names: list(enum:FeatureType) -(list, default=all)
+
+    List of features that is to be extracted. More about is described in "List of feature types" 
+    
+- segment_length: int -(in second, default=5)
+
+    Segment length that should be used to do windowing of the signal
+    
+- segment_overlap: int -(in \%, default=0, related to=segment_length)
+
+    Segment overlapping percentage that should be used to do windowing of the signal
+    
+- signal_frequency: int -(in Hz, default=256)
+
+    Sampling frequency of the signal
+    
+- filtering_enabled: bool -(True/False, default=False)
+
+    If the high, low or band-pass filters should be applied
+    
+- lowcut: int (in Hz, default=1, related to=filtering_enabled)
+
+    The low-cut frequency for filtering
+    
+- highcut: int (in Hz, default=48, related to=filtering_enabled)
+
+    The high-cut frequency for filtering
+
+[comment]: <> (- manage_exceptional_data: int -&#40;0-3, default=0&#41;)
+  
+[comment]: <> (    If wanted to deal with empty or null data)
+  
+
+### Application (Code Examples) 
+    """ Importing necessary modules
+    """
+    from DIHC_FeatureManager.DIHC_FeatureManager import *
+
+    
+    """ Load data to an 1D np.array
+    """
+    sig_freq = 256
+    samp_data = np.array(...)
+    
+    """ Set sampling frequency
+    """
+    sig_freq = 256
+    
+    """ Create Feature Manager object
+    """
+    feat_manager = DIHC_FeatureManager()
+    
+    """ Call function to get all features
+    """
+    feat_df = feat_manager.get_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
+        
+    """ Call function to get time-domain non-linear featuers
+    """
+    feat_df = feat_manager.get_features_from_data(samp_data, feature_names=DIHC_FeatureGroup.tdNlEn.value, segment_length=5, signal_frequency=sig_freq)
+        
+    """ feat_df will have the list of features in a dataframe
+    """
+    feat_df
 
 
-### Function description
-get_features_from_data(self, data, feature_names=[], segment_length=None, segment_overlap=0, signal_frequency=256, filtering_enabled=False, lowcut=1, highcut=48, manage_exceptional_data=0) 
+## About
+Version: 0.9.0
 
+Stage: Initial beta
 
 
 
