@@ -1,6 +1,6 @@
 
 
-Generalized (Install:
+Generalized (Install):
 1) Go to: <matlab_directory>/RXXXX/extern/eninges/python
 2) Check if setup.py exits
 3) Install using "python setup.py install"
