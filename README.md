@@ -50,7 +50,7 @@ The functions are parametric so that the users can have the flexibility of using
 -----------
 - data : np.array <list like 1D array>
 
-    The data for which the features will be extracted
+    The signal data in 1D numpy array for which the features will be extracted
 
 ###### Optional
 ---------
