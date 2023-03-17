@@ -148,6 +148,21 @@ class DIHC_FeatureExtractor:
         # seg_values = np.round(seg_values, decimals=20) # ### Don't know why but some features are getting NaN if this is not given, especially SpertralEntropy
         # seg_values = 1000*seg_values
 
+        #check if the feate names are enum or string
+        if feature_names is None or len(feature_names)==0:
+            print("Extracting all features.")
+            feature_names = DIHC_FeatureGroup.all.value
+        elif type(feature_names[0]) != DIHC_FeatureGroup:
+            print("Invalid features...")
+            exit(0)
+        else:
+            feature_names_copy = list(feature_names)
+            feature_names = []
+            for itm in feature_names_copy:
+                feature_names.extend(itm.value)
+
+
+
         # Generate corresponding features
         for feat in feature_names:
             # print(feat)

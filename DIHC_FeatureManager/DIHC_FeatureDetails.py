@@ -145,9 +145,6 @@ class DIHC_FeatureDetails:
 
 
 
-# self.all_features = self.td_linear_statistical + self.td_nonlinear_entropy + self.td_nonlinear_complexity_and_fractal_dimensions + \
-#                             self.td_nonlinear_samp_entropy_profiling + self.fd_linear_statistical + self.fd_linear_statistical_binwise + \
-#                             self.fd_nonlinear_entropy + self.fd_spectral_band_power
 class DIHC_FeatureGroup(Enum):
     #TD-Lin
     tdLinStt = DIHC_FeatureDetails.td_linear_statistical
@@ -180,6 +177,6 @@ class DIHC_FeatureGroup(Enum):
     #FD
     fd = list(fdLin+fdNl)
 
-    #FD
+    #ALL
     all = list(td+fd)
 

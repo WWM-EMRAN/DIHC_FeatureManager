@@ -15,7 +15,7 @@ from DIHC_FeatureManager.DIHC_FeatureExtractor import *
 
 class DIHC_FeatureManager:
 
-    enumerate
+    # enumerate
 
     # ## Initialization
     def __init__(self):

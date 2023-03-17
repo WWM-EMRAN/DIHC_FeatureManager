@@ -28,7 +28,7 @@ Machine Learning models.
 
 ### Features:
 It contains the following features:
-![Problem finding the image...](feature_list.png "List of features.")
+![Problem finding the image...](list-of-features-detailed.png "List of features.")
 
 ### Description 
 #### Key Task:
@@ -85,7 +85,30 @@ The functions are parametric so that the users can have the flexibility of using
 [comment]: <> (- manage_exceptional_data: int -&#40;0-3, default=0&#41;)
   
 [comment]: <> (    If wanted to deal with empty or null data)
-  
+
+
+###### 'feature_names' parameters
+---------
+|Feature name to use | Details of the feature|
+|:----|:----|
+|tdLinStt | Time-domain linear statistical features|
+|tdLin | Time-domain linear features|
+|tdNlEn | Time-domain non-linear Entropy features|
+|tdNlComFD | Time-domain non-linear Complexity and Fractal dimension features|
+|tdNlEnSamProf | Time-domain non-linear Sample entropy-based secondary features features|
+|tdNl  | Time-domain non-linear features|
+|td  | Time-domain features|
+|fdLinStt  | Frequency-domain linear statistical features|
+|fdLinSttBnd | Frequency-domain linear band-wise statistical features|
+|fdLin | Frequency-domain linear features|
+|fdNlEn | Frequency-domain non-linear entropy features|
+|fdNlPw | Frequency-domain non-linear (spectral) power features|
+|fdNlPwBnd | Frequency-domain non-linear band-wise (spectral) power features|
+|fdNl | Frequency-domain non-linear features|
+|fd | Frequency-domain features|
+|all| All features|
+
+As mentioned in "Features" subsection above.
 
 ### Application (Code Examples) 
     """ Importing necessary modules
@@ -109,9 +132,13 @@ The functions are parametric so that the users can have the flexibility of using
     """
     feat_df = feat_manager.get_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
         
-    """ Call function to get time-domain non-linear featuers
+    """ Call function to get time-domain non-linear entropy featuers
     """
-    feat_df = feat_manager.get_features_from_data(samp_data, feature_names=DIHC_FeatureGroup.tdNlEn.value, segment_length=5, signal_frequency=sig_freq)
+    feat_df = feat_manager.get_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
+        
+    """ Call function to get time-domain non-linear entropy featuers and frequency-domain (spectral) power features
+    """
+    feat_df = feat_manager.get_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
         
     """ feat_df will have the list of features in a dataframe
     """
