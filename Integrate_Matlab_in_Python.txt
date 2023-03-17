@@ -1,7 +1,7 @@
 
 
 Generalized (Install):
-1) Go to: <matlab_directory>/RXXXX/extern/eninges/python
+1) Go to: <matlab_directory>/RXXXX/extern/engines/python
 2) Check if setup.py exits
 3) Install using "python setup.py install"
 4) import and work:
@@ -10,7 +10,7 @@ Generalized (Install):
 
 
 Code basis (Build): 
-1) Go to: <matlab_directory>/RXXXX/extern/eninges/python
+1) Go to: <matlab_directory>/RXXXX/extern/engines/python
 2) Check if setup.py exits
 3) Build using "python setup.py build --build-base "<an_accessible_user_directory_for_matlab_build>" install"
 4) To import and work you need to add the build path to the python code as:
