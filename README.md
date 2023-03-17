@@ -87,7 +87,7 @@ The functions are parametric so that the users can have the flexibility of using
 [comment]: <> (    If wanted to deal with empty or null data)
 
 
-###### 'feature_names' parameters
+###### List of feature types: 'feature_names' parameters
 ---------
 |Feature name to use | Details of the feature|
 |:----|:----|
