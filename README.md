@@ -153,7 +153,7 @@ Stage: Initial beta
 
 
 ## Credits
-Some of the features are derived from the following sources. Appreciate all the authors of these libraries and papers.
+Some of the features are derived from the following sources. Appreciate all the authors of these libraries and papers. Please do not forget to appreciate them.
 1. https://raphaelvallat.com/entropy/build/html/index.html
 2. https://doi.org/10.1109/TBME.2018.2808271
 3. https://doi.org/10.1371/journal.pone.0193691 
