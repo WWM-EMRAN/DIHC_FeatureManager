@@ -32,7 +32,8 @@ if __name__ == '__main__':
     print(f'Feature extraction started...')
     feat_manager = DIHC_FeatureManager()
     # feat_df = feat_manager.get_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
-    feat_df = feat_manager.get_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.fdLinStt], segment_length=5, signal_frequency=sig_freq)
+    # feat_df = feat_manager.get_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.td], segment_length=5, signal_frequency=sig_freq)
+    feat_df = feat_manager.get_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.tdNl], segment_length=5, signal_frequency=sig_freq)
     print(f'Feature extraction completed...')
 
 

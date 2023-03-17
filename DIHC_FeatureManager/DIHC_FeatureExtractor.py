@@ -161,6 +161,11 @@ class DIHC_FeatureExtractor:
             for itm in feature_names_copy:
                 feature_names.extend(itm.value)
 
+            #remove duplicate and sort
+            feature_names_copy = list(set(feature_names))
+            all_feature_names = DIHC_FeatureGroup.all.value
+            feature_names = [it for it in all_feature_names if it in feature_names_copy]
+
 
 
         # Generate corresponding features
