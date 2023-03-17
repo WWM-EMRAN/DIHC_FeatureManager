@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Jun  5 20:55:47 2020
-@author: WWM Emran (wwm.emran@gmail.com)
-Copyright and support: HumachLab (humachlab@gmail.com)
+File Name: DIHC_FeatureExtractor.py
+Author: WWM Emran (Emran Ali)
+Involvement: HumachLab & Deakin- Innovation in Healthcare (DIHC)
+Email: wwm.emran@gmail.com, emran.ali@research.deakin.edu.au
+Date: 5/01/2020 8:55 pm
 """
 
 
@@ -138,7 +140,7 @@ class DIHC_FeatureExtractor:
 
     ### Getting all the features
     #############################################################
-    def get_all_features(self, seg_data, feature_names):
+    def generate_features(self, seg_data, feature_names):
         if self.matlab_engine is None:
             self.matlab_engine = self.manage_matlab_python_engine()
         feature_values = []
@@ -155,6 +157,7 @@ class DIHC_FeatureExtractor:
         elif type(feature_names[0]) != DIHC_FeatureGroup:
             print("Invalid features...")
             exit(0)
+            # return
         else:
             feature_names_copy = list(feature_names)
             feature_names = []

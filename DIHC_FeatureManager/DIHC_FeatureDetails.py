@@ -1,7 +1,8 @@
 """
-File Name: HumachLab_FeatureDetails.py 
+File Name: DIHC_FeatureDetails.py
 Author: WWM Emran (Emran Ali)
-Email: wwm.emran@gmail.com, emran.ali@research.deakin.edu.au 
+Involvement: HumachLab & Deakin- Innovation in Healthcare (DIHC)
+Email: wwm.emran@gmail.com, emran.ali@research.deakin.edu.au
 Date: 3/09/2021 7:38 pm
 """
 
