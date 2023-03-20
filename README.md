@@ -83,33 +83,26 @@ It returns a 2D numpy array containing the data points in inner dimension and th
 
 ###### Application (Code Examples) 
 -------------------------------------
-    """ Importing necessary modules
-    """
+    ##### Importing necessary modules
     from DIHC_FeatureManager.DIHC_FeatureManager import *
 
     
-    """ Load data to an 1D np.array
-    """
+    ##### Load data to an 1D np.array 
     samp_data = np.array(...)
     
-    """ Set sampling frequency
-    """
+    ##### Set sampling frequency
     sig_freq = 256
     
-    """ Create Feature Manager object
-    """
+    ##### Create Feature Manager object
     feat_manager = DIHC_FeatureManager()
     
-    """ Call function to get 5 second non-overlapping segments
-    """
+    ##### Call function to get 5 second non-overlapping segments
     feat_df = feat_manager.get_segments_for_data(samp_data, segment_length=5, signal_frequency=sig_freq)
         
-    """ Call function to get 5 second 20% overlapping segments
-    """
+    ##### Call function to get 5 second 20% overlapping segments
     feat_df = get_segments_for_data(samp_data, segment_length=5, segment_overlap=20, signal_frequency=sig_freq)
         
-    """ feat_df will have the list of features in a 2D np.array
-    """
+    ##### feat_df will have the list of features in a 2D np.array 
     feat_df
 
 
@@ -211,37 +204,28 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
 
 ###### Application (Code Examples) 
 -------------------------------------
-    """ Importing necessary modules
-    """
+    ##### Importing necessary modules 
     from DIHC_FeatureManager.DIHC_FeatureManager import *
 
-    
-    """ Load data to an 1D np.array
-    """
+    ##### Load data to an 1D np.array 
     samp_data = np.array(...)
     
-    """ Set sampling frequency
-    """
+    ##### Set sampling frequency 
     sig_freq = 256
     
-    """ Create Feature Manager object
-    """
+    ##### Create Feature Manager object 
     feat_manager = DIHC_FeatureManager()
     
-    """ Call function to get all features
-    """
+    ##### Call function to get all features 
     feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
         
-    """ Call function to get time-domain non-linear entropy featuers
-    """
+    ##### Call function to get time-domain non-linear entropy featuers 
     feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
         
-    """ Call function to get time-domain non-linear entropy featuers and frequency-domain (spectral) power features
-    """
-    feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
+    ##### Call function to get time-domain non-linear entropy featuers and frequency-domain (spectral) power features 
+    feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.fdNlPw], segment_length=5, signal_frequency=sig_freq)
         
-    """ feat_df will have the list of features in a dataframe
-    """
+    ##### feat_df will have the list of features in a dataframe 
     feat_df
 
 
@@ -301,37 +285,28 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
 
 ###### Application (Code Examples) 
 -------------------------------------
-    """ Importing necessary modules
-    """
+    ##### Importing necessary modules 
     from DIHC_FeatureManager.DIHC_FeatureManager import *
 
-    
-    """ Load data to an 2D np.array
-    """
+    ##### Load data to an 2D np.array 
     samp_data = np.array(...)
     
-    """ Set sampling frequency
-    """
+    ##### Set sampling frequency 
     sig_freq = 256
     
-    """ Create Feature Manager object
-    """
+    ##### Create Feature Manager object 
     feat_manager = DIHC_FeatureManager()
     
-    """ Call function to get all features
-    """
+    ##### Call function to get all features 
     feat_df = feat_manager.extract_features_from_segments(samp_data, segment_length=5, signal_frequency=sig_freq)
         
-    """ Call function to get time-domain non-linear entropy featuers
-    """
+    ##### Call function to get time-domain non-linear entropy featuers 
     feat_df = feat_manager.extract_features_from_segments(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
         
-    """ Call function to get time-domain non-linear entropy featuers and frequency-domain (spectral) power features
-    """
-    feat_df = feat_manager.extract_features_from_segments(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
+    ##### Call function to get time-domain non-linear entropy featuers and frequency-domain (spectral) power features 
+    feat_df = feat_manager.extract_features_from_segments(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.fdNlPw], segment_length=5, signal_frequency=sig_freq)
         
-    """ feat_df will have the list of features in a dataframe
-    """
+    ##### feat_df will have the list of features in a dataframe 
     feat_df
 
 
