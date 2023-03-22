@@ -189,6 +189,11 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
 - highcut: int (in Hz, default=48, related to=filtering_enabled)
 
     The high-cut frequency for filtering
+    
+- has_matlab_engine: bool -(True/False, default=True, related to=filtering_enabled)
+
+    Has matlab engine for python been set up, False if don't have matlab. As a result Fuzzy, Distribution and Entropy Profile 
+  related features will be excluded 
 
 [comment]: <> (- manage_exceptional_data: int -&#40;0-3, default=0&#41;)
   
@@ -218,6 +223,9 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
     
     ##### Call function to get all features 
     feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
+    
+    ##### Call function to get all features with matlab related features excluded
+    feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
         
     ##### Call function to get time-domain non-linear entropy featuers 
     feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
@@ -270,6 +278,11 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
 - highcut: int (in Hz, default=48, related to=filtering_enabled)
 
     The high-cut frequency for filtering
+    
+- has_matlab_engine: bool -(True/False, default=True, related to=filtering_enabled)
+
+    Has matlab engine for python been set up, False if don't have matlab. As a result Fuzzy, Distribution and Entropy Profile 
+  related features will be excluded 
 
 [comment]: <> (- manage_exceptional_data: int -&#40;0-3, default=0&#41;)
   
@@ -299,6 +312,9 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
     
     ##### Call function to get all features 
     feat_df = feat_manager.extract_features_from_segments(samp_data, segment_length=5, signal_frequency=sig_freq)
+    
+    ##### Call function to get all features with matlab related features excluded
+    feat_df = feat_manager.extract_features_from_segments(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
         
     ##### Call function to get time-domain non-linear entropy featuers 
     feat_df = feat_manager.extract_features_from_segments(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)

@@ -181,3 +181,6 @@ class DIHC_FeatureGroup(Enum):
     #ALL
     all = list(td+fd)
 
+    #Matlab features
+    mat_feats = list(['fuzzyEntropy', 'distributionEntropy']+tdNlEnSamProf)
+

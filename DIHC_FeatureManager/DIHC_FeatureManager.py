@@ -51,7 +51,7 @@ class DIHC_FeatureManager:
 
     # ## Feature extractor - from data
     def extract_features_from_data(self, data, feature_names=[], segment_length=None, segment_overlap=0, signal_frequency=256,
-                               filtering_enabled=False, lowcut=1, highcut=48, manage_exceptional_data=0):
+                               filtering_enabled=False, lowcut=1, highcut=48, manage_exceptional_data=0, has_matlab_engine=True):
         if len(data)==0:
             print(f'Data is empty...')
             exit(0)
@@ -60,7 +60,7 @@ class DIHC_FeatureManager:
         sampPS = len(data) if segment_length is None else (segment_length*signal_frequency)
 
         self.feat_extractor = DIHC_FeatureExtractor(manage_exceptional_data=manage_exceptional_data, signal_frequency=signal_frequency,
-                                                    sample_per_second=sampPS, filtering_enabled=filtering_enabled, lowcut=lowcut, highcut=highcut)
+                                                    sample_per_second=sampPS, filtering_enabled=filtering_enabled, lowcut=lowcut, highcut=highcut, has_matlab_engine=has_matlab_engine)
         all_feat_df = pd.DataFrame()
 
         if segment_length is None:
@@ -99,7 +99,7 @@ class DIHC_FeatureManager:
 
     # ## Feature extractor - from segments
     def extract_features_from_segments(self, data, feature_names=[], signal_frequency=256,
-                               filtering_enabled=False, lowcut=1, highcut=48, manage_exceptional_data=0):
+                               filtering_enabled=False, lowcut=1, highcut=48, manage_exceptional_data=0, has_matlab_engine=True):
         if len(data)==0:
             print(f'Data is empty...')
             exit(0)
@@ -115,7 +115,7 @@ class DIHC_FeatureManager:
         sampPS = len(data[0]) if segment_length is None else (segment_length*signal_frequency)
 
         self.feat_extractor = DIHC_FeatureExtractor(manage_exceptional_data=manage_exceptional_data, signal_frequency=signal_frequency,
-                                                    sample_per_second=sampPS, filtering_enabled=filtering_enabled, lowcut=lowcut, highcut=highcut)
+                                                    sample_per_second=sampPS, filtering_enabled=filtering_enabled, lowcut=lowcut, highcut=highcut, has_matlab_engine=has_matlab_engine)
         all_feat_df = pd.DataFrame()
 
         for seg_data in data:

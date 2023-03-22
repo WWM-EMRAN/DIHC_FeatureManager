@@ -35,13 +35,14 @@ import pyeeg
 
 # from utils import _linear_regression, _log_n
 
-import matlab
-import matlab.engine
+# import matlab
+# import matlab.engine
 # from utils import _embed
 
 ### SRART: My modules ###
 from DIHC_FeatureManager import *
 from DIHC_FeatureManager.DIHC_FeatureDetails import *
+from DIHC_FeatureManager.DIHC_FeatureDetails import DIHC_FeatureGroup
 ### END: My modules ###
 
 
@@ -50,7 +51,7 @@ from DIHC_FeatureManager.DIHC_FeatureDetails import *
 ###
 class DIHC_FeatureExtractor:
 
-    def __init__(self, manage_exceptional_data=0, signal_frequency = 256, sample_per_second=1280, filtering_enabled=False, lowcut=1, highcut=48, matlab_file_loc=r'./DIHC_FeatureManager/'):
+    def __init__(self, manage_exceptional_data=0, signal_frequency = 256, sample_per_second=1280, filtering_enabled=False, lowcut=1, highcut=48, matlab_file_loc=r'./DIHC_FeatureManager/', has_matlab_engine=True):
         self.manage_exceptional_data = manage_exceptional_data
 
         self.td_linear_statistical = DIHC_FeatureDetails.td_linear_statistical
@@ -85,6 +86,7 @@ class DIHC_FeatureExtractor:
         self.fd_data_dict = None
         self.entropy_profile = None
         self.matlab_engine = None
+        self.has_matlab_engine = has_matlab_engine
         self.matlab_file_loc = matlab_file_loc
 
         return
@@ -97,7 +99,6 @@ class DIHC_FeatureExtractor:
 
         eggs_loader = pkgutil.find_loader('matlab')
         found = eggs_loader is not None
-
 
         mat_bld_path = str(Path.home())
         mat_bld_path = mat_bld_path.replace("\\\\", "\\")
@@ -142,7 +143,10 @@ class DIHC_FeatureExtractor:
     #############################################################
     def generate_features(self, seg_data, feature_names):
         if self.matlab_engine is None:
-            self.matlab_engine = self.manage_matlab_python_engine()
+            if self.has_matlab_engine:
+                self.matlab_engine = self.manage_matlab_python_engine()
+            else:
+                feature_names = []
         feature_values = []
 
         seg_values = seg_data.copy()
@@ -169,7 +173,11 @@ class DIHC_FeatureExtractor:
             all_feature_names = DIHC_FeatureGroup.all.value
             feature_names = [it for it in all_feature_names if it in feature_names_copy]
 
-
+        # remove matlab-based features
+        if not self.has_matlab_engine:
+            final_fts = feature_names.copy()
+            feature_names = []
+            feature_names = [ft for ft in final_fts if ft not in DIHC_FeatureGroup.mat_feats.value]
 
         # Generate corresponding features
         for feat in feature_names:
