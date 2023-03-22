@@ -1,17 +1,20 @@
 # DIHC_FeatureManager
 
 
-## Project Name: DIHC_FeatureManager 
+## About the project
 Contributor: Emran Ali
-
-Involvement: Deakin- Innovation in Healthcare (DIHC)
 
 Email: emran.ali@research.deakin.edu.au
 
-Thanks to: DIHC Team
+Involvement: Deakin University- Innovation in Healthcare (DIHC) (GitHub: https://github.com/Innovation-in-Healthcare)
 
 
-## What does it do?
+
+## Description
+This library was initially developed for personal and team's research application targetting signal processing and signal data.
+
+
+#### Target tasks
 Feature engineering and other feature management related tasks. 
 
 This library provides a variety of functionalities starting from feature extraction, 
@@ -21,7 +24,7 @@ Machine Learning models.
 <br>
 Main functionalities include:
 <ol>
-  <li>Signal segmentation</li>
+  <li>Data segmentation</li>
   <li>Feature extraction</li>
   <li>Feature selection (not completed yet)</li>
 </ol>
@@ -331,6 +334,18 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
 
 
 
+## Declaration
+This is a simplified library initially developed for personal and limited community use. 
+It is not bug free and going through continuous evaluation & updates, please use it on your own responsibility.
+Please let us know if any bug has been spotted and don't forget to acknowledge if it is found helpful. 
+
+
+
+## Dependencies
+1. Antropy: https://github.com/raphaelvallat/antropy
+2. Other libraries that it is derived from:  numpy, pandas, scipy, scikit-learn, numba, stochastic, antropy
+3. Matlab Engine: (for some features)
+
 
 ## About
 Version: 0.9.0
@@ -340,7 +355,7 @@ Stage: Initial beta
 
 
 ## Acknowledgement
-Some of the features are derived from the following sources. Appreciate all the authors of these libraries and papers. Please do not forget to appreciate them.
+Some of the features are derived from the following sources. Let's appreciate all the authors of these libraries and papers. 
 1. https://raphaelvallat.com/antropy/build/html/index.html
 2. https://doi.org/10.1109/TBME.2018.2808271
 3. https://doi.org/10.1371/journal.pone.0193691 
