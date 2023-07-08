@@ -146,7 +146,7 @@ class DIHC_FeatureExtractor:
             if self.has_matlab_engine:
                 self.matlab_engine = self.manage_matlab_python_engine()
             else:
-                feature_names = []
+                feature_names = [ff for ff in feature_names if ff not in DIHC_FeatureGroup.mat_feats.value]
         feature_values = []
 
         seg_values = seg_data.copy()
@@ -163,6 +163,7 @@ class DIHC_FeatureExtractor:
             exit(0)
             # return
         else:
+            print("Extracting some features.")
             feature_names_copy = list(feature_names)
             feature_names = []
             for itm in feature_names_copy:

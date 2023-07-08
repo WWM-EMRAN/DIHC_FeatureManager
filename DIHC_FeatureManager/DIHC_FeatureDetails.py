@@ -172,6 +172,7 @@ class DIHC_FeatureGroup(Enum):
     fdNlEn = DIHC_FeatureDetails.fd_nonlinear_entropy
     fdNlPw = DIHC_FeatureDetails.fd_spectral_power
     fdNlPwBnd = DIHC_FeatureDetails.fd_spectral_band_power
+    fdNlAllPw = DIHC_FeatureDetails.fd_spectral_power+DIHC_FeatureDetails.fd_spectral_band_power
 
     fdNl = list(fdNlEn+fdNlPw+fdNlPwBnd)
 

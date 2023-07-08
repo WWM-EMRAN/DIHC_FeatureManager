@@ -71,6 +71,7 @@ class DIHC_FeatureManager:
                 print(f'Data can\'t be segmented...')
                 all_feat_df = self.feat_extractor.generate_features(data, feature_names)
             else:
+                print(f'Data started segmenting...{feature_names}')
                 self.data_segmenter = DIHC_DataSegmenter(data, segment_length=segment_length, segment_overlap=segment_overlap, signal_frequency=signal_frequency)
                 seg_generator = self.data_segmenter.generate_segments()
                 while True:

@@ -132,6 +132,7 @@ It contains the following features:
 |fdNlEn | Frequency-domain non-linear entropy features|
 |fdNlPw | Frequency-domain non-linear (spectral) power features|
 |fdNlPwBnd | Frequency-domain non-linear band-wise (spectral) power features|
+|fdNlAllPw | Frequency-domain non-linear (spectral) power features including band-wise power|
 |fdNl | Frequency-domain non-linear features|
 |fd | Frequency-domain features|
 |all| All features|
