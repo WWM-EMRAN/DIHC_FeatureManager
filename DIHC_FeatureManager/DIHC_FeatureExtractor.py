@@ -143,6 +143,7 @@ class DIHC_FeatureExtractor:
     #############################################################
     def generate_features(self, seg_data, feature_names):
         self.fd_data_dict = None
+        self.entropy_profile = None
         if self.matlab_engine is None:
             if self.has_matlab_engine:
                 self.matlab_engine = self.manage_matlab_python_engine()
@@ -256,7 +257,7 @@ class DIHC_FeatureExtractor:
             # print(feat, type(final_data), len(final_data), final_data)
 
             feat_val = 0
-            result = np.all(final_data == final_data[0])
+            result = np.all(final_data == final_data[0]) if len(final_data)>1 else True
             if not result:
                 feat_val = method(final_data)
                 # # Handling nan data
