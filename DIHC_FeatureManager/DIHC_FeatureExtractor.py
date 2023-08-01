@@ -142,6 +142,7 @@ class DIHC_FeatureExtractor:
     ### Getting all the features
     #############################################################
     def generate_features(self, seg_data, feature_names):
+        self.fd_data_dict = None
         if self.matlab_engine is None:
             if self.has_matlab_engine:
                 self.matlab_engine = self.manage_matlab_python_engine()
@@ -193,10 +194,12 @@ class DIHC_FeatureExtractor:
                 if feat.startswith('fd_'):
                     if (feat in (self.fd_linear_statistical)) or (feat in (self.fd_linear_statistical_binwise)):
                         #FFT data for frequency domain features
+                        # print('HHHHHHHHHH', feat, final_feat, final_data[:5], max(final_data))
                         data_dict = self.fd_data_dict
                         if (self.fd_data_dict is None):
                             data_dict = self.fd_spectralAmplitude(seg_values)
                             self.fd_data_dict = data_dict
+                            # print('JJJJJJJJJJ', feat, final_feat, final_data[:5], max(final_data), max(self.fd_data_dict.values()))
 
                         final_feat_list = (feat.split('_'))
                         fnl = len(final_feat_list)
@@ -210,6 +213,7 @@ class DIHC_FeatureExtractor:
                                 tmp = [i for i in tmp if i in range(self.band_frequency_list[final_feat_list[2]][0], self.band_frequency_list[final_feat_list[2]][1])]
                                 final_data = [data_dict[x] for x in tmp]
 
+                        # print('KKKKKKKKK', feat, final_feat, final_data[:5], max(final_data))
                     elif (feat in (self.fd_spectral_band_power)):
                         final_feat_list = (feat.split('_'))
                         fnl = len(final_feat_list)

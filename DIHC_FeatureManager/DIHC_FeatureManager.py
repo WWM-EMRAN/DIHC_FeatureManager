@@ -77,6 +77,7 @@ class DIHC_FeatureManager:
                 while True:
                     try:
                         seg_data = next(seg_generator)
+                        print('SEG data', seg_data)
                         feat_df = self.feat_extractor.generate_features(seg_data, feature_names)
                         all_feat_df = pd.concat([all_feat_df, feat_df])
                         all_feat_df = all_feat_df.reset_index(drop=True)
