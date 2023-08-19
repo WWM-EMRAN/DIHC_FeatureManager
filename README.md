@@ -357,7 +357,10 @@ Stage: Initial beta
 ## Citation  
 If you use this library, please cite the following papers: 
 1. Ali E, Udhayakumar RK, Angelova M, Karmakar C. Performance analysis of entropy methods in detecting epileptic seizure from surface electroencephalograms. In2021 43rd Annual International Conference of the IEEE Engineering in Medicine & Biology Society (EMBC) 2021 Nov 1 (pp. 1082-1085). IEEE.
-   DOI:```https://doi.org/10.1109/EMBC46164.2021.9629538``` 
+   DOI:```https://doi.org/10.1109/EMBC46164.2021.9629538```
+   
+2. R. K. Udhayakumar, C. Karmakar and M. Palaniswami, "Understanding Irregularity Characteristics of Short-Term HRV Signals Using Sample Entropy Profile," in IEEE Transactions on Biomedical Engineering, vol. 65, no. 11, pp. 2569-2579, Nov. 2018.
+    DOI:```https://doi.org/10.1109/TBME.2018.2808271``` 
 
 
 
