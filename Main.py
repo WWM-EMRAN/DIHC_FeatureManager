@@ -33,9 +33,19 @@ if __name__ == '__main__':
     print(samp_data.shape, samp_data)
     print(f'Data minimization completed...')
 
+
+    print(f'Data segmentation started...')
+    feat_manager = DIHC_FeatureManager()
+    seg_df = feat_manager.get_segments_for_data(samp_data, segment_length=5, signal_frequency=sig_freq)
+    print(f'Data segmentation completed...')
+
+    print(f'Showing segments...')
+    print(seg_df.shape)
+    print(seg_df)
+
+
     print(f'Feature extraction started...')
     feat_manager = DIHC_FeatureManager()
-    # feat_df = feat_manager.get_segments_for_data(samp_data, segment_length=5, signal_frequency=sig_freq)
     # feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
     feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
     # feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.fdNlPw, DIHC_FeatureGroup.fdNlPwBnd], segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
@@ -43,10 +53,11 @@ if __name__ == '__main__':
     # feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.tdNl], segment_length=5, signal_frequency=sig_freq, has_matlab_engine=True)
     print(f'Feature extraction completed...')
 
-
+    print(f'Showing features...')
     # print(len(feat_df.columns.values.tolist()), feat_df.columns.values.tolist())
     print(feat_df.shape)
     print(feat_df)
+
 
 
 
