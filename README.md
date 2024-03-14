@@ -11,14 +11,14 @@ Involvement: Deakin University- Innovation in Healthcare (DIHC) (GitHub: https:/
 
 
 ## Description
-This library was initially developed for personal and team's research application targetting signal processing and signal data.
+This library was initially developed for personal and team research applications targeting the processing and analysis of EEG signal data.
 
 
 #### Target tasks
-Feature engineering and other feature management related tasks. 
+Feature engineering and other feature management-related tasks. 
 
 This library provides a variety of functionalities starting from feature extraction, 
-feature selection and other feature management and engineering related tasks.
+feature selection and other feature management and engineering-related tasks.
 This Feature Manager project has been developed as part of feature engineering for 
 Machine Learning models. 
 <br>
@@ -31,8 +31,8 @@ Main functionalities include:
 
 #### Note: 
 <ol>
-  <li>This is not a complete library and we are continuously adding contents in it. Until now, only the signal segmentation and feature extraction part has been completed.</li>
-  <li>For Fuzzy entropy, Distribution entropy and Sample entropy profile features Matlab engine is needed to be installed. For more instruction, please see "Integrate_Matlab_in_Python.txt".</li>
+  <li>This is not a complete library and we are continuously adding content to it. Until now, only the signal segmentation and feature extraction part has been completed.</li>
+  <li>For Fuzzy entropy, Distribution entropy and Sample entropy profile features Matlab engine needs to be installed. For more instructions, please see "Integrate_Matlab_in_Python.txt".</li>
 </ol>
 
 
@@ -53,14 +53,14 @@ Takes- data, segment_length, segment_overlap, signal_frequency
 Returns- 2D np.array 
 
 It generates controlled segments based on the criteria of window length, overlapping etc.
-It returns a 2D numpy array containing the data points in inner dimension and the number of segments stacked over the outer dimension.
+It returns a 2D numpy array containing the data points in the inner dimension and the number of segments stacked over the outer dimension.
   
 
 ###### Arguments
 -------------------------------------
 - data : np.array <list like 1D array>
 
-    The signal data in 1D numpy array for which the features will be extracted
+    The signal data in a 1D numpy array for which the features will be extracted
 
 ###### Arguments (Optional)
 -------------------------------------
@@ -81,7 +81,7 @@ It returns a 2D numpy array containing the data points in inner dimension and th
 -------------------------------------
 - 2D np.array -(np.array, default=None)
 
-     2D numpy array containing the data points in inner dimension (column-wise) and the number of segments stacked over the outer dimension (row-wise).
+     2D numpy array containing the data points in the inner dimension (column-wise) and the number of segments stacked over the outer dimension (row-wise).
 
 
 ###### Application (Code Examples) 
@@ -96,13 +96,13 @@ It returns a 2D numpy array containing the data points in inner dimension and th
     ##### Set sampling frequency
     sig_freq = 256
     
-    ##### Create Feature Manager object
+    ##### Create a Feature Manager object
     feat_manager = DIHC_FeatureManager()
     
-    ##### Call function to get 5 second non-overlapping segments
+    ##### Call function to get 5-second non-overlapping segments
     feat_df = feat_manager.get_segments_for_data(samp_data, segment_length=5, signal_frequency=sig_freq)
         
-    ##### Call function to get 5 second 20% overlapping segments
+    ##### Call function to get 5-second 20% overlapping segments
     feat_df = get_segments_for_data(samp_data, segment_length=5, segment_overlap=20, signal_frequency=sig_freq)
         
     ##### feat_df will have the list of features in a 2D np.array 
@@ -137,7 +137,7 @@ It contains the following features:
 |fd | Frequency-domain features|
 |all| All features|
 
-As mentioned in "Features" subsection above.
+As mentioned in the "Features" subsection above.
 
 
 ### All Methods 
@@ -152,23 +152,23 @@ It has different parameters to control the segmentation process and the type of 
 
 Takes- data, feature_names, segment_length, segment_overlap, signal_frequency, filtering_enabled, lowcut, highcut, manage_exceptional_data 
 
-Returns- <pandas.DatFrame> 
+Returns- <pandas.DataFrame> 
 
 It generates features based on the data provided and other criteria of the names of the features, window length, sampling frequency etc.
-It returns a pandas dataframe containing the feature names (column-wise) and the features for the data points (row-wise).
+It returns a pandas DataFrame containing the feature names (column-wise) and the features for the data points (row-wise).
   
 
 ###### Arguments
 -------------------------------------
 - data : np.array <list like 1D array>
 
-    The signal data in 1D numpy array for which the features will be extracted
+    The signal data in a 1D numpy array for which the features will be extracted
 
 ###### Arguments (Optional)
 -------------------------------------
 - feature_names: list(enum:FeatureType) -(list, default=all)
 
-    List of features that is to be extracted. More about is described in "List of feature types" 
+    List of features that are to be extracted. More about it is described in the "List of feature types" 
     
 - segment_length: None/int -(in second, default=entire signal)
 
@@ -196,7 +196,7 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
     
 - has_matlab_engine: bool -(True/False, default=True, related to=filtering_enabled)
 
-    Has matlab engine for python been set up, False if don't have matlab. As a result Fuzzy, Distribution and Entropy Profile 
+    Has the Matlab engine for Python been set up, False if doesn't have Matlab installed and configured. As a result, Fuzzy, Distribution and Entropy Profile 
   related features will be excluded 
 
 [comment]: <> (- manage_exceptional_data: int -&#40;0-3, default=0&#41;)
@@ -206,9 +206,9 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
 
 ###### Return
 -------------------------------------
-- pandas.DatFrame -(pandas.DatFrame, default=None)
+- pandas.DataFrame -(pandas.DataFrame, default=None)
 
-    List of features that is to be extracted. More about is described in "List of feature types" 
+    List of features that are to be extracted. More about it is described in the "List of feature types" 
 
 
 ###### Application (Code Examples) 
@@ -222,22 +222,22 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
     ##### Set sampling frequency 
     sig_freq = 256
     
-    ##### Create Feature Manager object 
+    ##### Create a Feature Manager object 
     feat_manager = DIHC_FeatureManager()
     
     ##### Call function to get all features 
     feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
     
-    ##### Call function to get all features with matlab related features excluded
+    ##### Call function to get all features with Matlab related features excluded
     feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
         
-    ##### Call function to get time-domain non-linear entropy featuers 
+    ##### Call function to get time-domain non-linear entropy features 
     feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
         
-    ##### Call function to get time-domain non-linear entropy featuers and frequency-domain (spectral) power features 
+    ##### Call function to get time-domain non-linear entropy features and frequency-domain (spectral) power features 
     feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.fdNlPw], segment_length=5, signal_frequency=sig_freq)
         
-    ##### feat_df will have the list of features in a dataframe 
+    ##### feat_df will have the list of features in a DataFrame 
     feat_df
 
 
@@ -247,25 +247,25 @@ It has different parameters to control the type of features that the user wants 
 
 Takes- data, feature_names, signal_frequency, filtering_enabled, lowcut, highcut, manage_exceptional_data 
 
-Returns- <pandas.DatFrame> 
+Returns- <pandas.DataFrame> 
 
-Since the segmentation is done earlier, it expects the data to be matched with the signal_frequency, exception can have in the last segment. 
+Since the segmentation is done earlier, it expects the data to be matched with the signal_frequency, the exception can be in the last segment. 
 It generates features based on the data provided and other criteria of the names of the features, sampling frequency etc.
-It returns a pandas dataframe containing the feature names (column-wise) and the features for the data points (row-wise).
+It returns a pandas DataFrame containing the feature names (column-wise) and the features for the data points (row-wise).
   
 
 ###### Arguments
 -------------------------------------
 - data : np.array <list like 2D array>
 
-    The signal data in 2D numpy array for which the features will be extracted. The outer dimension indicates the number 
+    The signal data is in a 2D numpy array for which the features will be extracted. The outer dimension indicates the number 
   of segments and the inner dimension presents the data points in a particular segment.
 
 ###### Arguments (Optional)
 -------------------------------------
 - feature_names: list(enum:FeatureType) -(list, default=all)
 
-    List of features that is to be extracted. More about is described in "List of feature types" 
+    List of features that are to be extracted. More about it is described in the "List of feature types" 
     
 - signal_frequency: int -(in Hz, default=256)
 
@@ -285,7 +285,7 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
     
 - has_matlab_engine: bool -(True/False, default=True, related to=filtering_enabled)
 
-    Has matlab engine for python been set up, False if don't have matlab. As a result Fuzzy, Distribution and Entropy Profile 
+    Has the Matlab engine for Python been set up, False if doesn't have Matlab installed and configured. As a result, Fuzzy, Distribution and Entropy Profile 
   related features will be excluded 
 
 [comment]: <> (- manage_exceptional_data: int -&#40;0-3, default=0&#41;)
@@ -295,9 +295,9 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
 
 ###### Return
 -------------------------------------
-- pandas.DatFrame -(pandas.DatFrame, default=None)
+- pandas.DataFrame -(pandas.DataFrame, default=None)
 
-    List of features that is to be extracted. More about is described in "List of feature types" 
+    List of features that are to be extracted. More about it is described in the "List of feature types" 
 
 
 ###### Application (Code Examples) 
@@ -311,45 +311,133 @@ It returns a pandas dataframe containing the feature names (column-wise) and the
     ##### Set sampling frequency 
     sig_freq = 256
     
-    ##### Create Feature Manager object 
+    ##### Create a Feature Manager object 
     feat_manager = DIHC_FeatureManager()
     
     ##### Call function to get all features 
     feat_df = feat_manager.extract_features_from_segments(samp_data, segment_length=5, signal_frequency=sig_freq)
     
-    ##### Call function to get all features with matlab related features excluded
+    ##### Call function to get all features with Matlab-related features excluded
     feat_df = feat_manager.extract_features_from_segments(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
         
-    ##### Call function to get time-domain non-linear entropy featuers 
+    ##### Call function to get time-domain non-linear entropy features 
     feat_df = feat_manager.extract_features_from_segments(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn], segment_length=5, signal_frequency=sig_freq)
         
-    ##### Call function to get time-domain non-linear entropy featuers and frequency-domain (spectral) power features 
+    ##### Call function to get time-domain non-linear entropy features and frequency-domain (spectral) power features 
     feat_df = feat_manager.extract_features_from_segments(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.fdNlPw], segment_length=5, signal_frequency=sig_freq)
         
-    ##### feat_df will have the list of features in a dataframe 
+    ##### feat_df will have the list of features in a DataFrame 
     feat_df
 
 
-## 3. Feature Selection
+## 3. Entropy Profile Data 
+
+### Entropy profile of KS entropy group:
+Kolmogorov-Shenai (KS) entropy group contains several entropy including Approximate and Sample entropy. 
+A profile is a list of dynamic values for a specific entropy based on the data instead of one single value [2]. 
+The Sample entropy profile is implemented and the entire profile for Sample entropy (SampEn) can be achieved using the functions from this section. 
+
+
+### All Methods 
+<ol type="a">
+  <li>extract_sampEn_profile_from_data()</li>
+</ol>
+
+
+#### a. extract_sampEn_profile_from_data() | Sample Entropy Profile extraction 
+From a long signal data, it segments the signal data first and then extracts the Sample entropy profile for all the generated segments.  <br> 
+It has different parameters to control the segmentation process. <br>
+
+Takes- data, segment_length, segment_overlap, signal_frequency  
+
+Returns- <pandas.DataFrame> 
+
+It generates the Sample entropy profile based on the data provided and other criteria of the names of the features, window length, sampling frequency etc.
+It returns a pandas DataFrame containing the segment serial number (column-wise) and the Sample entropy profile values for the data points (row-wise).
+  
+
+###### Arguments
+-------------------------------------
+- data : np.array <list like 2D array>
+
+    The signal data is in a 2D numpy array for which the features will be extracted. The outer dimension indicates the number 
+  of segments and the inner dimension presents the data points in a particular segment.
+
+###### Arguments (Optional)
+-------------------------------------    
+- segment_length: None/int -(in second, default=entire signal)
+
+    Segment length that should be used to do windowing of the signal
+    
+- segment_overlap: int -(in \%, default=0, related to=segment_length)
+
+    Segment overlapping percentage that should be used to do windowing of the signal
+    
+- signal_frequency: int -(in Hz, default=256)
+
+    Sampling frequency of the signal
+    
+- has_matlab_engine: bool -(True/False, default=True, related to=filtering_enabled)
+
+    Has the Matlab engine for Python been set up, False if doesn't have Matlab installed and configured. As a result, the Entropy Profile 
+  cannot be extracted. Although it is optional right now, it needs to be true to get the Entropy Profile  
+
+[comment]: <> (- manage_exceptional_data: int -&#40;0-3, default=0&#41;)
+  
+[comment]: <> (    If wanted to deal with empty or null data)
+
+
+###### Return
+-------------------------------------
+- pandas.DataFrame -(pandas.DataFrame, default=None)
+
+    A DataFrame containing the list of segment serial numbers and the corresponding Sample entropy profile data for each segment 
+
+
+###### Application (Code Examples) 
+-------------------------------------
+    ##### Importing necessary modules 
+    from DIHC_FeatureManager.DIHC_FeatureManager import *
+
+    ##### Load data to an 2D np.array 
+    samp_data = np.array(...)
+    
+    ##### Set sampling frequency 
+    sig_freq = 256
+    
+    ##### Create a Feature Manager object 
+    feat_manager = DIHC_FeatureManager()
+    
+    ##### Call function to get Sample entropy profile data for a 5-second segment with a 2-second overlap 
+    entProf_df = feat_manager.extract_sampEn_profile_from_data(samp_data, segment_length=5, segment_overlap=2, signal_frequency=sig_freq)
+    
+    ##### Call function to get Sample entropy profile data for a 5-second segment with no overlap 
+    # entProf_df = feat_manager.extract_sampEn_profile_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=True)
+    
+    ##### feat_df will have the Sample entropy profile data in a DataFrame 
+    entProf_df
+
+
+## 4. Feature Selection
 (Yet to implement)
 
 
 
 ## Declaration
 This is a simplified library initially developed for personal and limited community use. 
-It is not bug free and going through continuous evaluation & updates, please use it on your own responsibility.
+It is not bug-free and going through continuous evaluation & updates, please use it on your own responsibility.
 Please let us know if any bug has been spotted and don't forget to acknowledge if it is found helpful. 
-
 
 
 ## Dependencies
 1. Antropy: https://github.com/raphaelvallat/antropy
-2. Other libraries that it is derived from:  numpy, pandas, scipy, scikit-learn, numba, stochastic, antropy
-3. Matlab Engine: (for some features)
+2. PyEEG: https://github.com/forrestbao/pyeeg
+3. Other libraries that it is derived from:  numpy, pandas, scipy, scikit-learn, numba, stochastic, antropy, mne 
+4. Matlab Engine: (for some features)
 
 
 ## About
-Version: 0.9.0
+Version: 0.10.0
 
 Stage: Initial beta
 
