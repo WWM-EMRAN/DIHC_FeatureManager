@@ -41,6 +41,7 @@ import pyeeg
 
 ### SRART: My modules ###
 from DIHC_FeatureManager import *
+from DIHC_FeatureManager.DIHC_EntropyProfile import *
 from DIHC_FeatureManager.DIHC_FeatureDetails import *
 from DIHC_FeatureManager.DIHC_FeatureDetails import DIHC_FeatureGroup
 ### END: My modules ###
@@ -51,7 +52,7 @@ from DIHC_FeatureManager.DIHC_FeatureDetails import DIHC_FeatureGroup
 ###
 class DIHC_FeatureExtractor:
 
-    def __init__(self, manage_exceptional_data=0, signal_frequency = 256, sample_per_second=1280, filtering_enabled=False, lowcut=1, highcut=48, matlab_file_loc=r'./DIHC_FeatureManager/', has_matlab_engine=True):
+    def __init__(self, manage_exceptional_data=0, signal_frequency = 256, sample_per_second=1280, filtering_enabled=False, lowcut=1, highcut=48, matlab_file_loc=r'./DIHC_FeatureManager/', has_matlab_engine=False):
         self.manage_exceptional_data = manage_exceptional_data
 
         self.td_linear_statistical = DIHC_FeatureDetails.td_linear_statistical
@@ -119,6 +120,7 @@ class DIHC_FeatureExtractor:
                 print(f'Starting matlab engine (custom)...')
             else:
                 print(f'No matlab is installed...')
+                exit(0)
             return eng
         else:
             print(f'Quitting matlab engine...')
@@ -141,14 +143,19 @@ class DIHC_FeatureExtractor:
 
     ### Getting all the features
     #############################################################
-    def generate_features(self, seg_data, feature_names):
+    def generate_features(self, seg_data, feature_names, matlab_eng):
         self.fd_data_dict = None
         self.entropy_profile = None
-        if self.matlab_engine is None:
+        if self.matlab_engine is None: # and matlab_eng is None:
             if self.has_matlab_engine:
                 self.matlab_engine = self.manage_matlab_python_engine()
             else:
+                print(f"Does not have the matlab engine setup...")
                 feature_names = [ff for ff in feature_names if ff not in DIHC_FeatureGroup.mat_feats.value]
+        else:
+            if matlab_eng is not None:
+                self.matlab_engine = matlab_eng
+            print(f"Already have matlab engine running...")
         feature_values = []
 
         seg_values = seg_data.copy()
@@ -229,7 +236,9 @@ class DIHC_FeatureExtractor:
                 elif feat.startswith('entropyProfiled_'):
                     enProf = self.entropy_profile
                     if self.entropy_profile is None:
-                        enProf = self._call_entropy_profiling_algorithm(final_data)
+                        entProf_obj = DIHC_EntropyProfile(has_matlab_engine=self.has_matlab_engine, matlab_engine=self.matlab_engine)
+                        enProf = entProf_obj.get_sample_entropy_profile(final_data)
+                        # enProf = self._get_sample_entropy_profile(final_data)
                         dat = np.asarray(enProf)
                         dat2 = [0.0]
                         if len(enProf)>1:
@@ -304,7 +313,7 @@ class DIHC_FeatureExtractor:
 
         # self.manage_matlab_python_engine(self.matlab_engine)
 
-        return all_features
+        return all_features, self.matlab_engine
 
 ###########################################################################
 ### Time Domain Features
@@ -568,31 +577,31 @@ class DIHC_FeatureExtractor:
             return (1.0 / (1.0 - alpha)) * np.log2(np.sum(data ** alpha))
 
 
-    ############ Entropy Profiling
-    # Collected from @author: radhagayathri
-    def _call_entropy_profiling_algorithm(self, data, m=2):
-
-        sig_seg_df_list = data.tolist()
-
-        # Calling Matlab code from Python
-        # is_gen = False
-        eng = self.matlab_engine
-        # if self.matlab_engine is None:
-        #     eng = self.manage_matlab_python_engine()
-        #     self.matlab_engine = eng
-        #     is_gen = True
-
-        # print(f'{len(sig_seg_df_list)} {sig_seg_df_list}')
-        ent2 = eng.sampEnProfiling(sig_seg_df_list, m, nargout=1)
-        if isinstance(ent2, float):
-            ent2 = [ent2]
-        ent = list(ent2)
-        # print(f'=== {len(ent)} {ent}')
-
-        # if is_gen:
-        #     self.manage_matlab_python_engine(existing_eng=eng)
-
-        return ent
+    # ############ Entropy Profiling
+    # # Collected from @author: radhagayathri
+    # def _get_sample_entropy_profile(self, data, m=2):
+    #
+    #     sig_seg_df_list = data.tolist()
+    #
+    #     # Calling Matlab code from Python
+    #     # is_gen = False
+    #     eng = self.matlab_engine
+    #     # if self.matlab_engine is None:
+    #     #     eng = self.manage_matlab_python_engine()
+    #     #     self.matlab_engine = eng
+    #     #     is_gen = True
+    #
+    #     # print(f'{len(sig_seg_df_list)} {sig_seg_df_list}')
+    #     ent2 = eng.sampEnProfiling(sig_seg_df_list, m, nargout=1)
+    #     if isinstance(ent2, float):
+    #         ent2 = [ent2]
+    #     ent = list(ent2)
+    #     # print(f'=== {len(ent)} {ent}')
+    #
+    #     # if is_gen:
+    #     #     self.manage_matlab_python_engine(existing_eng=eng)
+    #
+    #     return ent
 
 
 ### Frequency Domain Features

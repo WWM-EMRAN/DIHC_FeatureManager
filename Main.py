@@ -44,19 +44,38 @@ if __name__ == '__main__':
     print(seg_df)
 
 
-    print(f'Feature extraction started...')
-    feat_manager = DIHC_FeatureManager()
-    # feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
-    feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
-    # feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.fdNlPw, DIHC_FeatureGroup.fdNlPwBnd], segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
-    # feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.td], segment_length=5, signal_frequency=sig_freq, has_matlab_engine=True)
-    # feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.tdNl], segment_length=5, signal_frequency=sig_freq, has_matlab_engine=True)
-    print(f'Feature extraction completed...')
+    ########## This portion is for Feature extraction ##############
+    # print(f'Feature extraction started...')
+    # feat_manager = DIHC_FeatureManager()
+    # # feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
+    # feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=True)
+    # # feat_df = feat_manager.extract_features_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
+    # # feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.fdNlPw, DIHC_FeatureGroup.fdNlPwBnd], segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
+    # # feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.td], segment_length=5, signal_frequency=sig_freq, has_matlab_engine=True)
+    # # feat_df = feat_manager.extract_features_from_data(samp_data, feature_names=[DIHC_FeatureGroup.tdNlEn, DIHC_FeatureGroup.tdNl], segment_length=5, signal_frequency=sig_freq, has_matlab_engine=True)
+    # print(f'Feature extraction completed...')
 
-    print(f'Showing features...')
-    # print(len(feat_df.columns.values.tolist()), feat_df.columns.values.tolist())
-    print(feat_df.shape)
-    print(feat_df)
+    # print(f'Showing features...')
+    # # print(len(feat_df.columns.values.tolist()), feat_df.columns.values.tolist())
+    # print(feat_df.shape)
+    # print(feat_df)
+
+
+    ########## This portion is for Sample Entropy Profile extraction ##############
+    print(f'Entropy profile extraction started...')
+    feat_manager = DIHC_FeatureManager()
+    entProf_df = feat_manager.extract_sampEn_profile_from_data(samp_data, segment_length=5, signal_frequency=sig_freq)
+    # entProf_df = feat_manager.extract_sampEn_profile_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=True)
+    # entProf_df = feat_manager.extract_sampEn_profile_from_data(samp_data, segment_length=5, signal_frequency=sig_freq, has_matlab_engine=False)
+    # entProf_df = feat_manager.extract_sampEn_profile_from_data(samp_data, segment_length=5, segment_overlap=0, signal_frequency=sig_freq, has_matlab_engine=False)
+    print(f'Entropy profile extraction completed...')
+
+    print(f'Showing entropy profile...')
+    # print(len(entProf_df.columns.values.tolist()), entProf_df.columns.values.tolist())
+    print(entProf_df.shape)
+    print(entProf_df)
+
+
 
 
 
