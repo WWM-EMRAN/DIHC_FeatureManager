@@ -10,6 +10,7 @@ import pandas as pd
 
 ### SRART: My modules ###
 from DIHC_FeatureManager import *
+from DIHC_FeatureManager.DIHC_EntropyProfile import *
 from DIHC_FeatureManager.DIHC_FeatureExtractor import *
 from DIHC_FeatureManager.DIHC_DataSegmenter import *
 ### END: My modules ###
@@ -62,14 +63,15 @@ class DIHC_FeatureManager:
         self.feat_extractor = DIHC_FeatureExtractor(manage_exceptional_data=manage_exceptional_data, signal_frequency=signal_frequency,
                                                     sample_per_second=sampPS, filtering_enabled=filtering_enabled, lowcut=lowcut, highcut=highcut, has_matlab_engine=has_matlab_engine)
         all_feat_df = pd.DataFrame()
+        matlab_eng = None
 
         if segment_length is None:
             print(f'Dealing with entire signal...')
-            all_feat_df = self.feat_extractor.generate_features(data, feature_names)
+            all_feat_df, matlab_eng = self.feat_extractor.generate_features(data, feature_names, matlab_eng)
         else:
             if (segment_length*signal_frequency) > len(data):
                 print(f'Data can\'t be segmented...')
-                all_feat_df = self.feat_extractor.generate_features(data, feature_names)
+                all_feat_df, matlab_eng = self.feat_extractor.generate_features(data, feature_names, matlab_eng)
             else:
                 print(f'Data started segmenting...{feature_names}')
                 self.data_segmenter = DIHC_DataSegmenter(data, segment_length=segment_length, segment_overlap=segment_overlap, signal_frequency=signal_frequency)
@@ -78,7 +80,7 @@ class DIHC_FeatureManager:
                     try:
                         seg_data = next(seg_generator)
                         print('SEG data', seg_data)
-                        feat_df = self.feat_extractor.generate_features(seg_data, feature_names)
+                        feat_df, matlab_eng = self.feat_extractor.generate_features(seg_data, feature_names, matlab_eng)
                         all_feat_df = pd.concat([all_feat_df, feat_df])
                         all_feat_df = all_feat_df.reset_index(drop=True)
                     except StopIteration:
@@ -119,13 +121,62 @@ class DIHC_FeatureManager:
         self.feat_extractor = DIHC_FeatureExtractor(manage_exceptional_data=manage_exceptional_data, signal_frequency=signal_frequency,
                                                     sample_per_second=sampPS, filtering_enabled=filtering_enabled, lowcut=lowcut, highcut=highcut, has_matlab_engine=has_matlab_engine)
         all_feat_df = pd.DataFrame()
+        matlab_eng = None
 
         for seg_data in data:
-            feat_df = self.feat_extractor.generate_features(seg_data, feature_names)
+            feat_df, matlab_eng = self.feat_extractor.generate_features(seg_data, feature_names, matlab_eng)
             all_feat_df = pd.concat([all_feat_df, feat_df])
             all_feat_df = all_feat_df.reset_index(drop=True)
 
         return all_feat_df
+
+
+    # ## Entropy profile extractor - from data
+    def extract_sampEn_profile_from_data(self, data, segment_length=None, segment_overlap=0, signal_frequency=256, has_matlab_engine=True):
+        if len(data)==0:
+            print(f'Data is empty...')
+            exit(0)
+            # return
+        if has_matlab_engine==False:
+            print(f'Cannot extract entropy profile if matlab engine is not available or not set up properly...')
+            exit(0)
+            # return
+
+        # sampPS = len(data) if segment_length is None else (segment_length*signal_frequency)
+
+        matlab_eng = None
+        self.entProf_extractor = DIHC_EntropyProfile(has_matlab_engine=has_matlab_engine, matlab_engine=matlab_eng)
+        all_entProf_df = pd.DataFrame()
+
+        if segment_length is None:
+            print(f'Dealing with entire signal...')
+            all_entProf_df, matlab_eng = self.entProf_extractor.generate_sampEn_profile(data, matlab_eng)
+        else:
+            if (segment_length*signal_frequency) > len(data):
+                print(f'Data can\'t be segmented...')
+                all_entProf_df, matlab_eng = self.entProf_extractor.generate_sampEn_profile(data, matlab_eng)
+            else:
+                print(f'Data started segmenting...')
+                self.data_segmenter = DIHC_DataSegmenter(data, segment_length=segment_length, segment_overlap=segment_overlap, signal_frequency=signal_frequency)
+                seg_generator = self.data_segmenter.generate_segments()
+                seg_num = 1
+                while True:
+                    try:
+                        seg_data = next(seg_generator)
+                        print('SEG data', seg_data)
+                        entProf_df, matlab_eng = self.entProf_extractor.generate_sampEn_profile(seg_data, matlab_eng)
+                        # print('xxxxxx- ', entProf_df.shape[0], [seg_num]*entProf_df.shape[0])
+                        seg_num_df = pd.DataFrame([seg_num]*entProf_df.shape[0], columns=['Segment_No'])
+                        seg_num_df = seg_num_df.reset_index(drop=True)
+                        entProf_df = pd.concat([seg_num_df, entProf_df], axis=1)
+                        all_entProf_df = pd.concat([all_entProf_df, entProf_df])
+                        all_entProf_df = all_entProf_df.reset_index(drop=True)
+                        # print(type(entProf_df), entProf_df)
+                    except StopIteration:
+                        print('Finished generating Sample entropy profile for all segments...')
+                        break
+                    seg_num += 1
+        return all_entProf_df
 
 
 
