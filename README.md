@@ -444,10 +444,11 @@ Stage: Initial beta
 
 ## Citation  
 If you use this library, please cite the following papers: 
-1. Ali E, Udhayakumar RK, Angelova M, Karmakar C. Performance analysis of entropy methods in detecting epileptic seizure from surface electroencephalograms. In2021 43rd Annual International Conference of the IEEE Engineering in Medicine & Biology Society (EMBC) 2021 Nov 1 (pp. 1082-1085). IEEE.
+1. Ali E, Angelova M, Karmakar C. Epileptic seizure detection using CHB-MIT dataset: The overlooked perspectives. Royal Society Open Science. 2024 May;11(6):230601.
+   DOI:```https://doi.org/10.1098/rsos.230601```
+2. Ali E, Udhayakumar RK, Angelova M, Karmakar C. Performance analysis of entropy methods in detecting epileptic seizure from surface electroencephalograms. In2021 43rd Annual International Conference of the IEEE Engineering in Medicine & Biology Society (EMBC) 2021 Nov 1 (pp. 1082-1085). IEEE.
    DOI:```https://doi.org/10.1109/EMBC46164.2021.9629538```
-   
-2. R. K. Udhayakumar, C. Karmakar and M. Palaniswami, "Understanding Irregularity Characteristics of Short-Term HRV Signals Using Sample Entropy Profile," in IEEE Transactions on Biomedical Engineering, vol. 65, no. 11, pp. 2569-2579, Nov. 2018.
+3. R. K. Udhayakumar, C. Karmakar and M. Palaniswami, "Understanding Irregularity Characteristics of Short-Term HRV Signals Using Sample Entropy Profile," in IEEE Transactions on Biomedical Engineering, vol. 65, no. 11, pp. 2569-2579, Nov. 2018.
     DOI:```https://doi.org/10.1109/TBME.2018.2808271``` 
 
 
@@ -456,7 +457,7 @@ If you use this library, please cite the following papers:
 ## Acknowledgement
 Some of the features are derived from the following sources. Let's appreciate all the authors of these libraries and papers. 
 1. https://raphaelvallat.com/antropy/build/html/index.html
-2. https://doi.org/10.1109/TBME.2018.2808271
-3. https://doi.org/10.1371/journal.pone.0193691 
+3. https://doi.org/10.1109/TBME.2018.2808271
+4. https://doi.org/10.1371/journal.pone.0193691 
 
 
