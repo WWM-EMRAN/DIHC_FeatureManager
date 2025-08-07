@@ -8,6 +8,7 @@ Date: 10/05/2022 9:49 pm
 
 from DIHC_FeatureManager import *
 from DIHC_FeatureManager.DIHC_FeatureExtractor import *
+from DIHC_FeatureManager.DIHC_FeatureExtrantor_Helper import *
 from DIHC_FeatureManager.DIHC_FeatureDetails import *
 from DIHC_FeatureManager.DIHC_EntropyProfile import *
 # import DIHC_FeatureManager

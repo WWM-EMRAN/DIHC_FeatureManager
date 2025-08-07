@@ -55,7 +55,7 @@ class DIHC_FeatureDetails:
     td_nonlinear_samp_entropy_profiling_short2 = ['TotalSampEn', 'AvgSampEn', 'MaxSampEn', 'MinSampEn',
                                                   'MedSampEn', 'StdSampEn', 'VarSampEn', 'KurSampEn',
                                                   'SkewSampEn']
-    # other means gamma frequency
+    # gamma means gamma frequency
     fd_linear_statistical = ['fd_maximum', 'fd_minimum', 'fd_mean', 'fd_median', 'fd_standardDeviation', 'fd_variance',
                              'fd_kurtosis', 'fd_skewness']
     fd_linear_statistical_short = ['fd_max', 'fd_min', 'fd_mean', 'fd_med', 'fd_std', 'fd_var', 'fd_kur', 'fd_skew']
@@ -73,9 +73,9 @@ class DIHC_FeatureDetails:
                                      'fd_maximum_theta', 'fd_minimum_theta', 'fd_mean_theta', 'fd_median_theta',
                                      'fd_standardDeviation_theta', 'fd_variance_theta', 'fd_kurtosis_theta',
                                      'fd_skewness_theta',
-                                     'fd_maximum_other', 'fd_minimum_other', 'fd_mean_other', 'fd_median_other',
-                                     'fd_standardDeviation_other', 'fd_variance_other', 'fd_kurtosis_other',
-                                     'fd_skewness_other']
+                                     'fd_maximum_gamma', 'fd_minimum_gamma', 'fd_mean_gamma', 'fd_median_gamma',
+                                     'fd_standardDeviation_gamma', 'fd_variance_gamma', 'fd_kurtosis_gamma',
+                                     'fd_skewness_gamma']
     fd_linear_statistical_binwise_short = ['fd_max_alpha', 'fd_min_alpha', 'fd_mean_alpha', 'fd_med_alpha',
                                            'fd_std_alpha', 'fd_var_alpha', 'fd_kur_alpha', 'fd_skew_alpha',
                                            'fd_max_beta', 'fd_min_beta', 'fd_mean_beta', 'fd_med_beta', 'fd_std_beta',
@@ -84,8 +84,8 @@ class DIHC_FeatureDetails:
                                            'fd_std_delta', 'fd_var_delta', 'fd_kur_delta', 'fd_skew_delta',
                                            'fd_max_theta', 'fd_min_theta', 'fd_mean_theta', 'fd_med_theta',
                                            'fd_std_theta', 'fd_var_theta', 'fd_kur_theta', 'fd_skew_theta',
-                                           'fd_max_other', 'fd_min_other', 'fd_mean_other', 'fd_med_other',
-                                           'fd_std_other', 'fd_var_other', 'fd_kur_other', 'fd_skew_other']
+                                           'fd_max_gamma', 'fd_min_gamma', 'fd_mean_gamma', 'fd_med_gamma',
+                                           'fd_std_gamma', 'fd_var_gamma', 'fd_kur_gamma', 'fd_skew_gamma']
     fd_linear_statistical_binwise_short2 = ['FD_MaxAlp', 'FD_MinAlp', 'FD_MeanAlp', 'FD_MedAlp', 'FD_StdAlp',
                                             'FD_VarAlp', 'FD_KurAlp', 'FD_SkewAlp',
                                             'FD_MaxBet', 'FD_MinBet', 'FD_MeanBet', 'FD_MedBet', 'FD_StdBet',
@@ -105,18 +105,32 @@ class DIHC_FeatureDetails:
     fd_spectral_power_short = ['fd_bandPw']
     fd_spectral_power_short2 = ['fd_bandPw']
 
+    # fd_spectral_band_power = ['fd_bandPower_alpha', 'fd_bandPower_beta', 'fd_bandPower_delta',
+    #                           'fd_bandPower_theta', 'fd_bandPower_gamma', 'fd_bandPower_gamma']
+    # fd_spectral_band_power_short = ['fd_bandPw_alpha', 'fd_bandPw_beta', 'fd_bandPw_delta',
+    #                                 'fd_bandPw_theta', 'fd_bandPw_gamma',
+    #                                 'fd_bandPw_gamma']
+    # fd_spectral_band_power_short2 = ['fd_bandPwAlp', 'fd_bandPwBet', 'fd_bandPwDel', 'fd_bandPwThe', 'fd_bandPwGam',
+    #                                  'fd_bandPwOth']
+
     fd_spectral_band_power = ['fd_bandPower_alpha', 'fd_bandPower_beta', 'fd_bandPower_delta',
-                              'fd_bandPower_theta', 'fd_bandPower_other']
+                              'fd_bandPower_theta', 'fd_bandPower_gamma']
     fd_spectral_band_power_short = ['fd_bandPw_alpha', 'fd_bandPw_beta', 'fd_bandPw_delta',
-                                    'fd_bandPw_theta',
-                                    'fd_bandPw_other']
-    fd_spectral_band_power_short2 = ['fd_bandPwAlp', 'fd_bandPwBet', 'fd_bandPwDel', 'fd_bandPwThe',
-                                     'fd_bandPwOth']
+                                    'fd_bandPw_theta', 'fd_bandPw_gamma']
+    fd_spectral_band_power_short2 = ['fd_bandPwAlp', 'fd_bandPwBet', 'fd_bandPwDel', 'fd_bandPwThe', 'fd_bandPwGam']
 
-    band_frequency_list = {'alpha': (8, 14), 'beta': (14, 31), 'delta': (0, 5), 'theta': (5, 8), 'gamma': (31, 100),
-                           'other': (31, 51)}
+    band_frequency_list = {'alpha': (8, 14), 'beta': (14, 31), 'delta': (0, 5), 'theta': (5, 8), 'gamma': (31, 100)}
 
+    # band_frequency_list = {'alpha': (8, 14), 'beta': (14, 31), 'delta': (0, 5), 'theta': (5, 8), 'gamma': (31, 100), 'other': (31, 51)}
     # band_frequency_list = {'alpha': (8, 12), 'beta': (12, 30), 'delta': (0.5, 4), 'theta': (4, 8), 'gamma': (30, 100), 'other': (30, 51)}
+
+    #### Computationally expensive features
+    comp_exp_list1 = ['shannonEntropy', 'renyiEntropy']
+    comp_exp_list2 = ['approximateEntropy']
+    comp_exp_list3 = ['sampleEntropy', 'fuzzyEntropy']
+    comp_exp_list4 = fd_spectral_power+fd_spectral_band_power
+    comp_exp_list5 = ['distributionEntropy']+td_nonlinear_samp_entropy_profiling
+
 
     # ## Initialization
     def __init__(self):
@@ -134,7 +148,7 @@ class DIHC_FeatureDetails:
         return
 
     # ## Mapping features with short names
-    def map_feature_names(self, feature_list):
+    def map_feature_names(self, feature_list, compuration):
         feat_short_names = []
 
         for feat in feature_list:
@@ -143,6 +157,8 @@ class DIHC_FeatureDetails:
                 # feat_short_names.append(self.all_features_short[i])
                 feat_short_names.append(self.all_features_short2[i])
         return feat_short_names
+
+
 
 
 
@@ -180,5 +196,38 @@ class DIHC_FeatureGroup(Enum):
     fd = list(fdLin+fdNl)
 
     #ALL
-    all = list(td+fd) 
+    all = list(td+fd)
 
+    #Comp exp feats
+    compExp1 = DIHC_FeatureDetails.comp_exp_list1
+    compExp2 = DIHC_FeatureDetails.comp_exp_list2
+    compExp3 = DIHC_FeatureDetails.comp_exp_list3
+    compExp4 = DIHC_FeatureDetails.comp_exp_list4
+    compExp5 = DIHC_FeatureDetails.comp_exp_list5
+
+    # ## Remove computationally expensive features
+    @classmethod
+    def remove_computationally_expensive_features(cls, feature_list=None, comp_exp_list_index=0):
+        if feature_list is None:
+            feature_list = [cls.all]  # Use cls instead of self
+        result = []
+        computationally_expensive_list = [DIHC_FeatureDetails.comp_exp_list1, DIHC_FeatureDetails.comp_exp_list2,
+                                         DIHC_FeatureDetails.comp_exp_list3, DIHC_FeatureDetails.comp_exp_list4,
+                                         DIHC_FeatureDetails.comp_exp_list5]
+
+        comp_exp_list = []
+        if comp_exp_list_index>=1 and comp_exp_list_index<=len(computationally_expensive_list):
+            comp_exp_list = [item for sublist in computationally_expensive_list[comp_exp_list_index-1:]  for item in sublist]
+        else:
+            comp_exp_list = [item for sublist in computationally_expensive_list for item in sublist]
+
+        # print(f"====>feature_list: {feature_list}\n---->comp_exp_list: {comp_exp_list}")
+
+        for feature_group in feature_list:
+            current_features = feature_group.value
+            filtered_features = [feat for feat in current_features if feat not in comp_exp_list]
+            if filtered_features:
+                new_member = cls[feature_group.name]
+                object.__setattr__(new_member, '_value_', filtered_features)  # Safe way to modify _value_
+                result.append(new_member)
+        return result

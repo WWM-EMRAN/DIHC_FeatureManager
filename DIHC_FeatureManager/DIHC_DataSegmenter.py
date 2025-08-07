@@ -8,6 +8,11 @@ Date: 3/09/2021 7:38 pm
 
 import pandas as pd
 
+try:
+    from tqdm.notebook import tqdm
+except:
+    from tqdm import tqdm
+
 ### SRART: My modules ###
 from DIHC_FeatureManager import *
 from DIHC_FeatureManager.DIHC_FeatureExtractor import *
@@ -17,11 +22,12 @@ from DIHC_FeatureManager.DIHC_FeatureExtractor import *
 class DIHC_DataSegmenter:
 
     # ## Initialization
-    def __init__(self, data, segment_length=None, segment_overlap=0, signal_frequency=256):
+    def __init__(self, data, segment_length=None, segment_overlap=0, signal_frequency=256, prog_bar=None):
         self.data = data
         self.segment_length = segment_length
         self.segment_overlap = segment_overlap
         self.signal_frequency = signal_frequency
+        self.prog_bar = prog_bar
         return
 
     # ## Data Segmentor
@@ -42,10 +48,16 @@ class DIHC_DataSegmenter:
                 seg_st = 0
                 seg_len = int(self.segment_length*self.signal_frequency)
                 seg_mov = int(seg_len-(self.segment_overlap*self.signal_frequency))
+                num_segs = max(0, int((len(self.data)-seg_len)/seg_mov +1) )
                 # print(f'---->> {seg_srl}, {seg_st}, {seg_len}, {seg_mov}')
-                print(f'Segment started...')
+                # print(f'Segmentation started...')
+                if self.prog_bar is None:
+                    self.prog_bar = tqdm(total=num_segs, desc=f'Segmentation started...')
+                else:
+                    self.prog_bar.set_description(f'Segmentation started...')
                 while (seg_st<len(self.data)):
-                    print(f'Generating segment# {seg_srl}')
+                    # print(f'Generating segment# {seg_srl}')
+                    self.prog_bar.set_description(f'Generating segment# {seg_srl}')
                     seg_end = seg_st+seg_len
                     if seg_end>len(self.data):
                         seg_end = len(self.data) 
@@ -55,7 +67,8 @@ class DIHC_DataSegmenter:
                     yield seg_data
                     seg_st += seg_mov
                     seg_srl += 1
-                print(f'Segment finished...')
+                # print(f'Segmentation finished...')
+                self.prog_bar.set_description(f'Segmentation finished...')
         return
 
 

@@ -8,6 +8,11 @@ Date: 3/09/2021 7:38 pm
 import numpy as np
 import pandas as pd
 
+try:
+    from tqdm.notebook import tqdm
+except:
+    from tqdm import tqdm
+
 ### SRART: My modules ###
 from DIHC_FeatureManager import *
 from DIHC_FeatureManager.DIHC_EntropyProfile import *
@@ -23,6 +28,8 @@ class DIHC_FeatureManager:
         self.data_segmenter = None
         self.feat_extractor = None
         self.feat_selector = None
+        self.prog_bar = None
+        # self.prog_bar = tqdm(total=100, desc=f'Feature manager started...')
         return
 
     # ## Segment generater
@@ -32,8 +39,13 @@ class DIHC_FeatureManager:
             exit(0)
             # return
 
+        # print('Data segmentation started...')
+        seg_len = int(segment_length * signal_frequency)
+        seg_mov = int(seg_len - (segment_overlap * signal_frequency))
+        num_segs = max(0, int((len(data) - seg_len) / seg_mov + 1))
+        self.prog_bar = tqdm(total=num_segs, desc=f'Data segmentation started...')
         self.data_segmenter = DIHC_DataSegmenter(data, segment_length=segment_length, segment_overlap=segment_overlap,
-                                                 signal_frequency=signal_frequency)
+                                                 signal_frequency=signal_frequency, prog_bar=self.prog_bar)
         seg_generator = self.data_segmenter.generate_segments()
         i = 0
         all_seg_data = np.array([])
@@ -46,7 +58,11 @@ class DIHC_FeatureManager:
                     all_seg_data = np.vstack([all_seg_data, seg_data])
                 i += 1
             except StopIteration:
+                # print('Finished segmentation of data...')
+                self.prog_bar = tqdm(total=num_segs, desc=f'Finished segmentation of data...')
                 break
+        # print('Finished segmentation of data...')
+        self.prog_bar = tqdm(total=num_segs, desc=f'Finished segmentation of data...')
         return all_seg_data
 
 
@@ -72,8 +88,12 @@ class DIHC_FeatureManager:
                 print(f'Data can\'t be segmented...')
                 all_feat_df = self.feat_extractor.generate_features(data, feature_names)
             else:
-                print(f'Data started segmenting...{feature_names}')
-                self.data_segmenter = DIHC_DataSegmenter(data, segment_length=segment_length, segment_overlap=segment_overlap, signal_frequency=signal_frequency)
+                print(f'Data started segmenting for features: {feature_names}')
+                seg_len = int(segment_length*signal_frequency)
+                seg_mov = int(seg_len-(segment_overlap*signal_frequency))
+                num_segs = max(0, int((len(data)-seg_len)/seg_mov +1) )
+                self.prog_bar = tqdm(total=num_segs, desc=f'Feature extraction started...')
+                self.data_segmenter = DIHC_DataSegmenter(data, segment_length=segment_length, segment_overlap=segment_overlap, signal_frequency=signal_frequency, prog_bar=self.prog_bar)
                 seg_generator = self.data_segmenter.generate_segments()
                 while True:
                     try:
@@ -83,8 +103,11 @@ class DIHC_FeatureManager:
                         all_feat_df = pd.concat([all_feat_df, feat_df])
                         all_feat_df = all_feat_df.reset_index(drop=True)
                     except StopIteration:
-                        print('Finished generating features for all segments...')
+                        # print('Finished extracting features for all segments...')
+                        self.prog_bar = tqdm(total=num_segs, desc=f'Finished extracting features for all segments...')
                         break
+                # print('Finished extracting features for all segments...')
+                self.prog_bar = tqdm(total=num_segs, desc=f'Finished extracting features for all segments...')
         return all_feat_df
 
 
@@ -149,8 +172,12 @@ class DIHC_FeatureManager:
                 print(f'Data can\'t be segmented...')
                 all_entProf_df = self.entProf_extractor.generate_sampEn_profile(data)
             else:
-                print(f'Data started segmenting...')
-                self.data_segmenter = DIHC_DataSegmenter(data, segment_length=segment_length, segment_overlap=segment_overlap, signal_frequency=signal_frequency)
+                print(f'Entropy profile calculation started...')
+                seg_len = int(segment_length*signal_frequency)
+                seg_mov = int(seg_len-(segment_overlap*signal_frequency))
+                num_segs = max(0, int((len(data)-seg_len)/seg_mov +1) )
+                self.prog_bar = tqdm(total=num_segs, desc=f'Entropy profile calculation started...')
+                self.data_segmenter = DIHC_DataSegmenter(data, segment_length=segment_length, segment_overlap=segment_overlap, signal_frequency=signal_frequency, prog_bar=self.prog_bar)
                 seg_generator = self.data_segmenter.generate_segments()
                 seg_num = 1
                 while True:
@@ -166,9 +193,12 @@ class DIHC_FeatureManager:
                         all_entProf_df = all_entProf_df.reset_index(drop=True)
                         # print(type(entProf_df), entProf_df)
                     except StopIteration:
-                        print('Finished generating Sample entropy profile for all segments...')
+                        # print('Finished generating Sample entropy profile for all segments...')
+                        self.prog_bar.set_description(f'Finished generating Sample entropy profile for all segments...')
                         break
                     seg_num += 1
+                # print('Finished generating Sample entropy profile for all segments...')
+                self.prog_bar.set_description(f'Finished generating Sample entropy profile for all segments...')
         return all_entProf_df
 
 

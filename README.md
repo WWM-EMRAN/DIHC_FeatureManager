@@ -329,6 +329,26 @@ It returns a pandas DataFrame containing the feature names (column-wise) and the
     feat_df
 
 
+#### z. <span style="color:red"> Warnig: </span>
+For smaller data/data segments, this above code works perfectly fine. 
+However, for larger data/data segments, the code will take a lot of time to run due to the extreme complexity of some feature calculation.
+Sometimes even may lead to memory (exhaustion) error. 
+We are gradually improving the code to add memory and speed optimisations.
+But for now, to deal with that, we recommend to use the function ``DIHC_FeatureGroup.remove_computationally_expensive_features( comp_exp_list_index=level_of_complexity )` to remove computationally expensive features and select the other features. 
+``level_of_complexity`` is an integer that defines the level of complexity of the features that are to be removed. 
+The higher the value, the more computationally expensive features are removed. 
+The following list shows the complexity of the features:
+
+|level_of_complexity | Details of the feature                                        |
+|:----|:--------------------------------------------------------------|
+|5 | Distribution Entropy, and all Sample Entropy Profile features |
+|4 | Frequency-domain non-linear all Band Power features           |
+|3 | Sample Entropy, and Fuzzy Entropy features                    |
+|2 | Approximate Entropy feature                                   |
+|1 | Shannon Entropy, and Renyi Entropy features                   |
+
+
+
 ## 3. Extropy profiling (profile data extraction) 
 
 ### Entropy profile of KS entropy group:
@@ -415,6 +435,13 @@ It returns a pandas DataFrame containing the segment serial number (column-wise)
     
     ##### feat_df will have the Sample entropy profile data in a DataFrame 
     entProf_df
+
+
+
+#### z. <span style="color:red"> Warnig: </span>
+For the same reason of larger data as explained in the previous section, this code may experience errors. 
+Hence, entropy profile values cannot be generated.  
+
 
 
 ## 4. Feature Selection

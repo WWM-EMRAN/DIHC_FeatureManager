@@ -39,6 +39,7 @@ import pyeeg
 ### SRART: My modules ###
 from DIHC_FeatureManager import *
 from DIHC_FeatureManager.DIHC_FeatureDetails import *
+from DIHC_FeatureManager.DIHC_FeatureExtrantor_Helper import *
 from DIHC_FeatureManager.DIHC_FeatureDetails import DIHC_FeatureGroup
 ### END: My modules ###
 
@@ -68,8 +69,9 @@ class DIHC_EntropyProfile:
         else:
             dat2 = [np.float64(item) for item in dat]
         enProf = np.array(dat2)
+        enProf = np.asarray(enProf, dtype=np.float64)
 
-        print(f"enProf: {enProf.shape} {enProf}")
+        # print(f"enProf: {enProf.shape} {enProf}")
 
         # dat = np.asarray(enProf)
         # dat2 = [0.0]
@@ -79,69 +81,76 @@ class DIHC_EntropyProfile:
 
         entProf_df = pd.DataFrame(enProf, columns=['sampEn_profile'])
 
-
         return entProf_df  
     
     
 
-    ############ Entropy Profiling (Python implementation)
-    def cumulative_histogram_method(self, data, m):
-        data = np.asarray(data).flatten()
-        N = len(data)
-
-        # Form template matrix for embedding dimension m
-        tmpltMatM = np.array([data[i:N - m - 1 + i + 1] for i in range(m)]).T
-        tmpltMatM1 = np.array([data[i:N - m - 1 + i + 1] for i in range(m + 1)]).T
-
-        matLenM = tmpltMatM.shape[0]
-        allDistM = []
-        allDistM1 = []
-
-        for i in range(matLenM):
-            vecM = tmpltMatM[i]
-            matM = np.delete(tmpltMatM, i, axis=0)
-            d = np.max(np.abs(matM - vecM), axis=1)
-            allDistM.append(np.round(d, 3))
-
-            vecM1 = tmpltMatM1[i]
-            matM1 = np.delete(tmpltMatM1, i, axis=0)
-            d1 = np.max(np.abs(matM1 - vecM1), axis=1)
-            allDistM1.append(np.round(d1, 3))
-
-        allDistM = np.array(allDistM).T
-        allDistM1 = np.array(allDistM1).T
-
-        D = np.concatenate((allDistM.flatten(), allDistM1.flatten()))
-        range_vals = np.unique(D)
-
-        # Compute cumulative histograms
-        allHistM = []
-        allHistM1 = []
-
-        for i in range(matLenM):
-            histM = np.histogram(allDistM[:, i], bins=np.append(range_vals, range_vals[-1]+1))[0]
-            cumHistM = np.cumsum(histM) / (matLenM - 1)
-            allHistM.append(cumHistM)
-
-            histM1 = np.histogram(allDistM1[:, i], bins=np.append(range_vals, range_vals[-1]+1))[0]
-            cumHistM1 = np.cumsum(histM1) / (matLenM - 1)
-            allHistM1.append(cumHistM1)
-
-        allHistM = np.array(allHistM).T
-        allHistM1 = np.array(allHistM1).T
-
-        b = np.sum(allHistM, axis=1) / matLenM
-        a = np.sum(allHistM1, axis=1) / matLenM
-
-        return b, a, range_vals
-
+    # ############ Entropy Profiling (Python implementation)
+    # def cumulative_histogram_method(self, data, m):
+    #     data = np.asarray(data).flatten()
+    #     N = len(data)
+    #
+    #     # Form template matrix for embedding dimension m
+    #     tmpltMatM = np.array([data[i:N - m - 1 + i + 1] for i in range(m)]).T
+    #     tmpltMatM1 = np.array([data[i:N - m - 1 + i + 1] for i in range(m + 1)]).T
+    #
+    #     matLenM = tmpltMatM.shape[0]
+    #     allDistM = []
+    #     allDistM1 = []
+    #
+    #     for i in range(matLenM):
+    #         vecM = tmpltMatM[i]
+    #         matM = np.delete(tmpltMatM, i, axis=0)
+    #         d = np.max(np.abs(matM - vecM), axis=1)
+    #         allDistM.append(np.round(d, 3))
+    #
+    #         vecM1 = tmpltMatM1[i]
+    #         matM1 = np.delete(tmpltMatM1, i, axis=0)
+    #         d1 = np.max(np.abs(matM1 - vecM1), axis=1)
+    #         allDistM1.append(np.round(d1, 3))
+    #
+    #     allDistM = np.array(allDistM).T
+    #     allDistM1 = np.array(allDistM1).T
+    #
+    #     D = np.concatenate((allDistM.flatten(), allDistM1.flatten()))
+    #     range_vals = np.unique(D)
+    #
+    #     # Compute cumulative histograms
+    #     allHistM = []
+    #     allHistM1 = []
+    #
+    #     for i in range(matLenM):
+    #         histM = np.histogram(allDistM[:, i], bins=np.append(range_vals, range_vals[-1]+1))[0]
+    #         cumHistM = np.cumsum(histM) / (matLenM - 1)
+    #         allHistM.append(cumHistM)
+    #
+    #         histM1 = np.histogram(allDistM1[:, i], bins=np.append(range_vals, range_vals[-1]+1))[0]
+    #         cumHistM1 = np.cumsum(histM1) / (matLenM - 1)
+    #         allHistM1.append(cumHistM1)
+    #
+    #     allHistM = np.array(allHistM).T
+    #     allHistM1 = np.array(allHistM1).T
+    #
+    #     b = np.sum(allHistM, axis=1) / matLenM
+    #     a = np.sum(allHistM1, axis=1) / matLenM
+    #
+    #     return b, a, range_vals
+    #
+    #
+    # #########################################
+    # def get_sample_entropy_profile(self, data, m=2):
+    #     data = np.asarray(data).flatten()
+    #     b, a, r_range = self.cumulative_histogram_method(data, m)
+    #     with np.errstate(divide='ignore', invalid='ignore'):
+    #         se_profile = np.log(np.divide(b, a))
+    #     se_profile = se_profile[np.isfinite(se_profile)]
+    #     return se_profile
 
     def get_sample_entropy_profile(self, data, m=2):
         data = np.asarray(data).flatten()
-        b, a, r_range = self.cumulative_histogram_method(data, m)
-        with np.errstate(divide='ignore', invalid='ignore'):
-            se_profile = np.log(np.divide(b, a))
+        se_profile = compute_entropy_profile_jit(data, m)
         se_profile = se_profile[np.isfinite(se_profile)]
+        se_profile = np.asarray(se_profile, dtype=np.float64)
         return se_profile
     ##########################################
 

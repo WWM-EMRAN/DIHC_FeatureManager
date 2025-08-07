@@ -8,38 +8,45 @@ Date: 5/01/2020 8:55 pm
 """
 
 
-###
-import math
-import pandas as pd
+### In-built modules
+
 import numpy as np
+import pandas as pd
+
+import math
 import scipy as sp
 import scipy.signal as sig
-import math
-import collections
+from scipy.integrate import simps
 from scipy.stats import entropy as scipyEntropy
 from scipy.signal import butter, lfilter, welch
-from scipy.integrate import simps
-from mne.time_frequency import psd_array_multitaper
-# from scipy.fft import fft
+from scipy.spatial.distance import pdist, squareform
 from scipy import fft, fftpack
-# from math import log, floor
-import math
 
 from antropy import *
-import pyeeg 
-from scipy.spatial.distance import pdist, squareform
+import pyeeg
+from mne.time_frequency import psd_array_multitaper
 
-# from numba import jit
+import collections
+
+from numba import jit, njit
+
+# from math import log, floor
+# from scipy.fft import fft
 # from math import factorial, log
 # from sklearn.neighbors import KDTree
 # from scipy.signal import periodogram, welch, butter, lfilter
-
 # from utils import _linear_regression, _log_n
+
+try:
+    from tqdm.notebook import tqdm
+except:
+    from tqdm import tqdm
 
 ### SRART: My modules ###
 from DIHC_FeatureManager import *
 from DIHC_FeatureManager.DIHC_EntropyProfile import *
 from DIHC_FeatureManager.DIHC_FeatureDetails import *
+from DIHC_FeatureManager.DIHC_FeatureExtrantor_Helper import *
 from DIHC_FeatureManager.DIHC_FeatureDetails import DIHC_FeatureGroup
 ### END: My modules ###
 
@@ -113,14 +120,14 @@ class DIHC_FeatureExtractor:
 
         #check if the feate names are enum or string
         if feature_names is None or len(feature_names)==0:
-            print("Extracting all features.")
+            # print("Extracting all features.")
             feature_names = DIHC_FeatureGroup.all.value
         elif type(feature_names[0]) != DIHC_FeatureGroup:
             print("Invalid features...")
             exit(0)
             # return
         else:
-            print("Extracting some features.")
+            # print("Extracting some features.")
             feature_names_copy = list(feature_names)
             feature_names = []
             for itm in feature_names_copy:
@@ -132,8 +139,10 @@ class DIHC_FeatureExtractor:
             feature_names = [it for it in all_feature_names if it in feature_names_copy] 
 
         # Generate corresponding features
-        for feat in feature_names:
-            print(f"---> {feat}") 
+        prog_bar = tqdm(feature_names, desc="Feature extraction started...")
+        for feat in prog_bar:
+            # print(f"---> {feat}")
+            prog_bar.set_description(f"Extracting feature: {feat}")
             method = None
             final_feat = None
             try:
@@ -216,6 +225,7 @@ class DIHC_FeatureExtractor:
             feat_val = 0
             result = np.all(final_data == final_data[0]) if len(final_data)>1 else True
             if not result:
+                final_data = np.asarray(final_data, dtype=np.float64)
                 feat_val = method(final_data)
                 # # Handling nan data
                 # if feat_val == np.nan:
@@ -226,18 +236,19 @@ class DIHC_FeatureExtractor:
             # feat_val = round(feat_val, 16)
             # print(f'{feat} -- {feat_val}')
             feature_values.append([feat_val])
+        prog_bar.set_description(f"Feature extraction finished...")
 
         # print(f'{feature_names} -- {feature_values}')
-        numpy_array = np.array(feature_values)
-        numpy_array = numpy_array.T
+        np_feat_value = np.array(feature_values)
+        np_feat_value = np_feat_value.T
 
-        # print(f'{len(feature_names)} {numpy_array.shape}')
-        # print(f'{numpy_array}')
-        # print(f'data--- {numpy_array} {feature_names}')
+        # print(f'{len(feature_names)} {np_feat_value.shape}')
+        # print(f'{np_feat_value}')
+        # print(f'data--- {np_feat_value} {feature_names}')
 
         all_features = pd.DataFrame()
-        if len(feature_names)>0 and len(numpy_array)>0:
-            all_features = pd.DataFrame(numpy_array, columns=feature_names)
+        if len(feature_names)>0 and len(np_feat_value)>0:
+            all_features = pd.DataFrame(np_feat_value, columns=feature_names)
         # print(f'{all_features}')
 
         # ##########################################################
@@ -422,51 +433,59 @@ class DIHC_FeatureExtractor:
         return dfl 
     
 
-    ## ######## Fuzzy entropy (Python implementation) 
+    # ## ######## Fuzzy entropy (Python implementation)
+    # def fuzzyEntropy(self, data,  m=2, tau=1, r=0.2):
+    #     """
+    #     Fuzzy Entropy calculation in Python.
+    #
+    #     Parameters:
+    #         data : array-like
+    #             Input signal (1D array).
+    #         m : int
+    #             Embedding dimension.
+    #         tau : int
+    #             Time delay.
+    #         r : float
+    #             Tolerance (as a fraction of std of s).
+    #
+    #     Returns:
+    #         fuzz_ent : float
+    #             Fuzzy entropy value.
+    #     """
+    #     data = np.asarray(data).flatten()
+    #     r = r * np.std(data)
+    #     N = len(data)
+    #
+    #     # Indices for embedding
+    #     ind_m = np.array([np.arange(i, i + m * tau, tau) for i in range(N - m * tau)])
+    #     ind_a = np.array([np.arange(i, i + (m + 1) * tau, tau) for i in range(N - m * tau)])
+    #
+    #     ym = data[ind_m]
+    #     ya = data[ind_a]
+    #
+    #     # Compute Chebyshev distance
+    #     cheb_ym = pdist(ym, metric='chebyshev')
+    #     cheb_ya = pdist(ya, metric='chebyshev')
+    #
+    #     cm = np.sum(np.exp(-np.log(2) * (cheb_ym / r) ** 2)) * 2 / (ym.shape[0] * (ym.shape[0] - 1))
+    #     ca = np.sum(np.exp(-np.log(2) * (cheb_ya / r) ** 2)) * 2 / (ya.shape[0] * (ya.shape[0] - 1))
+    #
+    #     if cm == 0 or ca == 0:
+    #         return np.nan  # Avoid log(0)
+    #
+    #     fuzz_ent = -np.log(ca / cm)
+    #     return fuzz_ent
+
+
     def fuzzyEntropy(self, data,  m=2, tau=1, r=0.2):
-        """
-        Fuzzy Entropy calculation in Python.
-        
-        Parameters:
-            data : array-like
-                Input signal (1D array).
-            m : int
-                Embedding dimension.
-            tau : int
-                Time delay.
-            r : float
-                Tolerance (as a fraction of std of s).
-        
-        Returns:
-            fuzz_ent : float
-                Fuzzy entropy value.
-        """
         data = np.asarray(data).flatten()
-        r = r * np.std(data)
-        N = len(data)
+        # data = data.astype(np.float64)
+        fuzz_ent = compute_fuzzy_entropy_jit(data, m, tau, r)
+        return fuzz_ent
 
-        # Indices for embedding
-        ind_m = np.array([np.arange(i, i + m * tau, tau) for i in range(N - m * tau)])
-        ind_a = np.array([np.arange(i, i + (m + 1) * tau, tau) for i in range(N - m * tau)])
 
-        ym = data[ind_m]
-        ya = data[ind_a]
 
-        # Compute Chebyshev distance
-        cheb_ym = pdist(ym, metric='chebyshev')
-        cheb_ya = pdist(ya, metric='chebyshev')
-
-        cm = np.sum(np.exp(-np.log(2) * (cheb_ym / r) ** 2)) * 2 / (ym.shape[0] * (ym.shape[0] - 1))
-        ca = np.sum(np.exp(-np.log(2) * (cheb_ya / r) ** 2)) * 2 / (ya.shape[0] * (ya.shape[0] - 1))
-
-        if cm == 0 or ca == 0:
-            return np.nan  # Avoid log(0)
-        
-        fuzz_ent = -np.log(ca / cm)
-        return fuzz_ent 
-    
-
-    # ## ######## Distribution entropy (Python implementation) 
+    # ## ######## Distribution entropy (Python implementation)
     # def distributionEntropy(self, data, m=2, M=500):
     #     """
     #     Compute Distribution Entropy (DistEn) using Peng Li's method.
@@ -514,48 +533,55 @@ class DIHC_FeatureExtractor:
     
 
 
-    def distributionEntropy(self, data, m=2, M=500): 
-        """
-        Python implementation of Distribution Entropy as per Peng Li's method.
-        Parameters:
-            data : 1D numpy array
-            m : embedding dimension (typically 2)
-            M : number of bins (typically 500)
-        Returns:
-            dist_en : Distribution Entropy value (should match MATLAB values closely)
-        """
+    # def distributionEntropy(self, data, m=2, M=500):
+    #     """
+    #     Python implementation of Distribution Entropy as per Peng Li's method.
+    #     Parameters:
+    #         data : 1D numpy array
+    #         m : embedding dimension (typically 2)
+    #         M : number of bins (typically 500)
+    #     Returns:
+    #         dist_en : Distribution Entropy value (should match MATLAB values closely)
+    #     """
+    #     data = np.asarray(data).flatten()
+    #     N = len(data)
+    #     if N <= m:
+    #         raise ValueError("Input data length must be greater than embedding dimension m.")
+    #
+    #     # Construct embedding matrix for dimension m
+    #     tmplt_mat = np.array([data[i:N - m + i] for i in range(m)]).T
+    #     mat_len = tmplt_mat.shape[0]
+    #
+    #     # Compute Chebyshev distances
+    #     all_dist_m = []
+    #     for i in range(mat_len):
+    #         tmpl_vec = tmplt_mat[i]
+    #         match_mat = np.delete(tmplt_mat, i, axis=0)
+    #         tmpl_repeated = np.tile(tmpl_vec, (mat_len - 1, 1))
+    #         dist = np.max(np.abs(tmpl_repeated - match_mat), axis=1)
+    #         all_dist_m.extend(dist)
+    #
+    #     all_dist_m = np.array(all_dist_m)
+    #
+    #     # Fixed bin histogram with M bins
+    #     freq_count, _ = np.histogram(all_dist_m, bins=M, range=(np.min(all_dist_m), np.max(all_dist_m)))
+    #     prob = freq_count / len(all_dist_m)
+    #
+    #     # Compute Distribution Entropy
+    #     nonzero_prob = prob[prob > 0]
+    #     y = nonzero_prob * np.log2(nonzero_prob)
+    #     dist_en = -np.sum(y) / np.log2(M)
+    #
+    #     return dist_en
+
+    def distributionEntropy(self, data, m=2, M=500):
         data = np.asarray(data).flatten()
         N = len(data)
         if N <= m:
             raise ValueError("Input data length must be greater than embedding dimension m.")
 
-        # Construct embedding matrix for dimension m
-        tmplt_mat = np.array([data[i:N - m + i] for i in range(m)]).T
-        mat_len = tmplt_mat.shape[0]
-
-        # Compute Chebyshev distances
-        all_dist_m = []
-        for i in range(mat_len):
-            tmpl_vec = tmplt_mat[i]
-            match_mat = np.delete(tmplt_mat, i, axis=0)
-            tmpl_repeated = np.tile(tmpl_vec, (mat_len - 1, 1))
-            dist = np.max(np.abs(tmpl_repeated - match_mat), axis=1)
-            all_dist_m.extend(dist)
-
-        all_dist_m = np.array(all_dist_m)
-
-        # Fixed bin histogram with M bins
-        freq_count, _ = np.histogram(all_dist_m, bins=M, range=(np.min(all_dist_m), np.max(all_dist_m)))
-        prob = freq_count / len(all_dist_m)
-
-        # Compute Distribution Entropy
-        nonzero_prob = prob[prob > 0]
-        y = nonzero_prob * np.log2(nonzero_prob)
-        dist_en = -np.sum(y) / np.log2(M)
-
+        dist_en = compute_distribution_entropy_jit(data, m, M)
         return dist_en
-
-
 
 
 
@@ -666,52 +692,108 @@ class DIHC_FeatureExtractor:
 
     ### Power of a signal or signal band
     ### @Author: raphaelvallat (Author of Antropy package) Source:- https://raphaelvallat.com/bandpower.html
+    # def fd_bandPower(self, data, method='multitaper', window_sec=None, relative=False):
+    #     """Compute the average power of the signal x in a specific frequency band.
+    #     Requires MNE-Python >= 0.14.
+    #     Parameters
+    #     ----------
+    #     data : 1d-array :- Input signal in the time-domain.
+    #     sf : float :- Sampling frequency of the data.
+    #     band : list :- Lower and upper frequencies of the band of interest.
+    #     method : string :- Periodogram method: 'welch' or 'multitaper'
+    #     window_sec : float :- Length of each window in seconds. Useful only if method == 'welch'. If None, window_sec = (1 / min(band)) * 2.
+    #     relative : boolean :-If True, return the relative power (= divided by the total power of the signal). If False (default), return the absolute power.
+    #     ------
+    #     Return
+    #     ------
+    #     bp : float :- Absolute or relative band power.
+    #     ------
+    #     Use
+    #     ------
+    #     # Multitaper delta power
+    #     bp = fd_bandpower(data, sf, [0.5, 4], 'multitaper')
+    #     311.559, and 0.790 (for relative band power)
+    #     """
+    #     sf = self.signal_frequency
+    #     band = self.band
+    #
+    #     band = np.asarray(band)
+    #     low, high = band
+    #     # Compute the modified periodogram (Welch)
+    #     freqs, psd = 0, 0
+    #     if method == 'welch':
+    #         if window_sec is not None:
+    #             nperseg = window_sec * sf
+    #         else:
+    #             nperseg = (2 / low) * sf
+    #         freqs, psd = welch(data, sf, nperseg=nperseg)
+    #     elif method == 'multitaper':
+    #         psd, freqs = psd_array_multitaper(data, sf, adaptive=True, normalization='full', verbose=0)
+    #     # Frequency resolution
+    #     freq_res = freqs[1] - freqs[0]
+    #     # Find index of band in frequency vector
+    #     idx_band = np.logical_and(freqs >= low, freqs <= high)
+    #     # Integral approximation of the spectrum using parabola (Simpson's rule)
+    #     bp = simps(psd[idx_band], dx=freq_res)
+    #     if relative:
+    #         bp /= simps(psd, dx=freq_res)
+    #     return bp
+
     def fd_bandPower(self, data, method='multitaper', window_sec=None, relative=False):
-        """Compute the average power of the signal x in a specific frequency band.
-        Requires MNE-Python >= 0.14.
-        Parameters
-        ----------
-        data : 1d-array :- Input signal in the time-domain.
-        sf : float :- Sampling frequency of the data.
-        band : list :- Lower and upper frequencies of the band of interest.
-        method : string :- Periodogram method: 'welch' or 'multitaper'
-        window_sec : float :- Length of each window in seconds. Useful only if method == 'welch'. If None, window_sec = (1 / min(band)) * 2.
-        relative : boolean :-If True, return the relative power (= divided by the total power of the signal). If False (default), return the absolute power.
-        ------
-        Return
-        ------
-        bp : float :- Absolute or relative band power.
-        ------
-        Use
-        ------
-        # Multitaper delta power
-        bp = fd_bandpower(data, sf, [0.5, 4], 'multitaper')
-        311.559, and 0.790 (for relative band power)
-        """
+        """Compute the average power of the signal x in a specific frequency band."""
         sf = self.signal_frequency
         band = self.band
 
+        # Input validation
+        if len(data) < 2:  # Need at least 2 points for frequency analysis
+            return 0
+
         band = np.asarray(band)
         low, high = band
+
         # Compute the modified periodogram (Welch)
-        freqs, psd = 0, 0
-        if method == 'welch':
-            if window_sec is not None:
-                nperseg = window_sec * sf
-            else:
-                nperseg = (2 / low) * sf
-            freqs, psd = welch(data, sf, nperseg=nperseg)
-        elif method == 'multitaper':
-            psd, freqs = psd_array_multitaper(data, sf, adaptive=True, normalization='full', verbose=0)
-        # Frequency resolution
-        freq_res = freqs[1] - freqs[0]
-        # Find index of band in frequency vector
-        idx_band = np.logical_and(freqs >= low, freqs <= high)
-        # Integral approximation of the spectrum using parabola (Simpson's rule)
-        bp = simps(psd[idx_band], dx=freq_res)
-        if relative:
-            bp /= simps(psd, dx=freq_res)
-        return bp
+        try:
+            if method == 'welch':
+                if window_sec is not None:
+                    nperseg = int(window_sec * sf)
+                else:
+                    nperseg = int((2 / low) * sf)
+                # Ensure nperseg is valid
+                nperseg = min(len(data), nperseg)
+                if nperseg < 2:
+                    return 0
+                freqs, psd = welch(data, sf, nperseg=nperseg)
+            elif method == 'multitaper':
+                psd, freqs = psd_array_multitaper(data, sf, adaptive=True,
+                                                  normalization='full', verbose=0)
+
+            # Verify we got valid results
+            if len(psd) == 0 or len(freqs) == 0:
+                return 0
+
+            # Frequency resolution
+            freq_res = freqs[1] - freqs[0]
+
+            # Find index of band in frequency vector
+            idx_band = np.logical_and(freqs >= low, freqs <= high)
+
+            # Check if we have any frequencies in our band
+            if not np.any(idx_band):
+                return 0
+
+            # Integral approximation of the spectrum using parabola (Simpson's rule)
+            bp = simps(psd[idx_band], dx=freq_res)
+
+            if relative:
+                total_power = simps(psd, dx=freq_res)
+                bp = bp / total_power if total_power != 0 else 0
+
+            return bp
+
+        except Exception as e:
+            # Log the error if needed
+            # print(f"Error in band power calculation: {str(e)}")
+            return 0
 
 
 
@@ -791,6 +873,12 @@ class DIHC_FeatureExtractor:
 ### Time-Frequency Domain Features
 
 ### Wevlate Domain Features
+
+
+
+
+####################################################################
+
 
 
 
