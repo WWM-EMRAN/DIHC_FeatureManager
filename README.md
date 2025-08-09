@@ -34,6 +34,7 @@ Main functionalities include:
 <ol>
   <li>This is not a complete library and we are continuously adding content to it. Until now, only the signal segmentation and feature extraction part has been completed.</li>
   <li><strike>For Fuzzy entropy, Distribution entropy and Sample entropy profile features Matlab engine needs to be installed. For more instructions, please see "Integrate_Matlab_in_Python.txt".</strike> This version now contains complete Python based feature extraction methods. No matlab is required now.</li>
+  <li>This is a pure puthon based library. But, if you still find the previous hybride (Python+Matlab) library useful, that can be accessed from: https://github.com/WWM-EMRAN/DIHC_FeatureManager_Matlab</li>
 </ol>
 
 
